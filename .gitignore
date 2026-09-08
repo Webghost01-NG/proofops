@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.test-build/
+.proofops/
+.env
+.env.*
+!.env.example
+playwright-report/
+test-results/
+screenshots/
+*.tsbuildinfo

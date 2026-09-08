@@ -1,0 +1,210 @@
+{
+  "format": "proofops.case.v1",
+  "exportedAt": "2026-09-08T22:11:30.006Z",
+  "mode": "current-state-check",
+  "expectation": "proof-valid",
+  "prerequisites": [
+    "Run: node dist/cli.js check <path-to-this-bundle.json> from the ProofOps project.",
+    "Configure your own source RPC and compatible Creditcoin / proof endpoints locally.",
+    "This check fetches fresh evidence and simulates at current finalized state; it is not historical replay.",
+    "A full destination integration check requires intended calldata and application-specific outcome assertions."
+  ],
+  "record": {
+    "id": "87a7a503-dd0e-4a0f-a9aa-2e524096f259",
+    "input": {
+      "sourceTx": "0xd075f995989aa96b712d93baa230ba2f35baec8c492b204337b505996131fd42"
+    },
+    "createdAt": "2026-09-08T22:11:24.340Z",
+    "updatedAt": "2026-09-08T22:11:29.999Z",
+    "sourceChainId": 11155111,
+    "creditcoinChainId": 102031,
+    "sourceChainKey": 1,
+    "attempts": [
+      {
+        "id": "5d0fc2aa-f616-4016-9a6c-4e48a91c4044",
+        "caseId": "87a7a503-dd0e-4a0f-a9aa-2e524096f259",
+        "startedAt": "2026-09-08T22:11:24.351Z",
+        "finishedAt": "2026-09-08T22:11:29.999Z",
+        "status": "ready",
+        "observations": [
+          {
+            "stage": "source",
+            "outcome": "pass",
+            "kind": "observed",
+            "code": "SOURCE_CONFIRMED",
+            "title": "Source transaction succeeded",
+            "detail": "Receipt and transaction observed through the configured source RPC. Proof verification is a separate check.",
+            "evidence": {
+              "block": {
+                "number": 11663782,
+                "hash": "0x7adf83c28d2178bc81b5489e6c7f1d3f4833bd675ed6e3eefc3b3b15b9a9ff90"
+              },
+              "transaction": {
+                "_type": "TransactionResponse",
+                "accessList": [],
+                "blockNumber": 11663782,
+                "blockHash": "0x7adf83c28d2178bc81b5489e6c7f1d3f4833bd675ed6e3eefc3b3b15b9a9ff90",
+                "blobVersionedHashes": null,
+                "chainId": "11155111",
+                "data": "0x",
+                "from": "0xd74dfb35757479884B9213E4E378d8435866f704",
+                "gasLimit": "21000",
+                "gasPrice": "3065115237",
+                "hash": "0xd075f995989aa96b712d93baa230ba2f35baec8c492b204337b505996131fd42",
+                "maxFeePerGas": "4138800146",
+                "maxPriorityFeePerGas": "2000000000",
+                "maxFeePerBlobGas": null,
+                "nonce": 1753,
+                "signature": {
+                  "_type": "signature",
+                  "networkV": null,
+                  "r": "0x6bafc0452a9a2105468bd29101186359012f9e3aed3c35cfc66285b96f348f92",
+                  "s": "0x43bc5dde1b39826c2228aec844b2380183ad9750c6f85a378370cb51dee766c3",
+                  "v": 27
+                },
+                "to": "0x65c05cc30fD9a1f5a44C14537162D6e2Da9b0B34",
+                "index": 0,
+                "type": 2,
+                "value": "123500000000000"
+              },
+              "receipt": {
+                "_type": "TransactionReceipt",
+                "blockHash": "0x7adf83c28d2178bc81b5489e6c7f1d3f4833bd675ed6e3eefc3b3b15b9a9ff90",
+                "blockNumber": 11663782,
+                "contractAddress": null,
+                "cumulativeGasUsed": "21000",
+                "from": "0xd74dfb35757479884B9213E4E378d8435866f704",
+                "gasPrice": "3065115237",
+                "blobGasUsed": null,
+                "blobGasPrice": null,
+                "gasUsed": "21000",
+                "hash": "0xd075f995989aa96b712d93baa230ba2f35baec8c492b204337b505996131fd42",
+                "index": 0,
+                "logs": [],
+                "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                "status": 1,
+                "to": "0x65c05cc30fD9a1f5a44C14537162D6e2Da9b0B34"
+              },
+              "encodedTransactionHash": "0x5f9b5956acf3b183cbcf2984aa234572b453f1657e2cf550b1c8cbbf04be4ade"
+            },
+            "at": "2026-09-08T22:11:25.665Z"
+          },
+          {
+            "stage": "attestation",
+            "outcome": "pass",
+            "kind": "observed",
+            "code": "ATTESTATION_READY",
+            "title": "Source height is attested",
+            "detail": "Creditcoin reports an attested height covering the source block. The proof service may still be catching up.",
+            "evidence": {
+              "height": 11663790,
+              "digest": "0x2c7274594b48291a372042bb816d7e8ed03992509e6f7e42cdd59d9c89c93121",
+              "exists": true,
+              "block": {
+                "number": 5454336,
+                "hash": "0xcac0ae5443b0ae9e8a521d24266343230ed350e0d92d7a5a5450a6356cd7f47e"
+              },
+              "registeredChainId": 11155111,
+              "chainEncoding": 1,
+              "requiredHeight": 11663782
+            },
+            "at": "2026-09-08T22:11:27.999Z"
+          },
+          {
+            "stage": "proof",
+            "outcome": "pass",
+            "kind": "observed",
+            "code": "PROOF_COLLECTED",
+            "title": "Proof received and source binding checked",
+            "detail": "Encoded transaction and receipt match the source RPC evidence byte-for-byte. Native verification is still required.",
+            "evidence": {
+              "proof": {
+                "chainKey": 1,
+                "headerNumber": 11663782,
+                "txIndex": 0,
+                "txHash": "0xd075f995989aa96b712d93baa230ba2f35baec8c492b204337b505996131fd42",
+                "txBytes": "0x0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000002a0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000006d90000000000000000000000000000000000000000000000000000000000005208000000000000000000000000d74dfb35757479884b9213e4e378d8435866f704000000000000000000000000000000000000000000000000000000000000000000000000000000000000000065c05cc30fd9a1f5a44c14537162d6e2da9b0b340000000000000000000000000000000000000000000000000000705295a1380000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000aa36a7000000000000000000000000000000000000000000000000000000007735940000000000000000000000000000000000000000000000000000000000f6b1141200000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000006bafc0452a9a2105468bd29101186359012f9e3aed3c35cfc66285b96f348f9243bc5dde1b39826c2228aec844b2380183ad9750c6f85a378370cb51dee766c3000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000005208000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                "merkleProof": {
+                  "root": "0x049e3516dd0ede06626d39f0648f669728118a4051656c6d36b39f71df42d69f",
+                  "siblings": [
+                    {
+                      "hash": "0x93e48f750b14f21f78fb3ed946fa6bfd43a4289274b0aa0ce34c040ce6a91396",
+                      "isLeft": false
+                    },
+                    {
+                      "hash": "0xc2e95c9d3e4144a546d40f85c45ea82ef413cbfc4676fa0898535d6a5de85b9a",
+                      "isLeft": false
+                    },
+                    {
+                      "hash": "0x7c22846e4be593c4c16bd9bd69ba5aa6ce11c6eaeb3f0e553a9295ffc8c27505",
+                      "isLeft": false
+                    },
+                    {
+                      "hash": "0x00131c85b00f3fdd8a443a6678bd20b2838f8c3b16a35c23ea1acb3afa8d4ecf",
+                      "isLeft": false
+                    },
+                    {
+                      "hash": "0xdd46f73c86753408f66b5c4743a0e44c7f528ccdbf88e26c07cd5421f42837fd",
+                      "isLeft": false
+                    },
+                    {
+                      "hash": "0xb9ba5924097f444c93bbd32b1662fd062aa94fc225206f27e3b21c97246e6f2f",
+                      "isLeft": false
+                    },
+                    {
+                      "hash": "0x8dcb9c92154bf09e0b5be1c71506d4d7cbeb31f2a394345f370d6a3b1cac3562",
+                      "isLeft": false
+                    }
+                  ]
+                },
+                "continuityProof": {
+                  "lowerEndpointDigest": "0xf20578fedf53cc4caf6ec04dc12247eb933c265cc3dcd784079822e97b6261dd",
+                  "roots": [
+                    "0x049e3516dd0ede06626d39f0648f669728118a4051656c6d36b39f71df42d69f",
+                    "0xb539cc783f55dd0bb33963412a8c753d4dc0936c7de8f76e5c6f5b2e5e2d1f2e",
+                    "0xbceb75230cb19c949a30f088c68c9f2f6738b763c6d70bb374cd5a2f71225c1b",
+                    "0xede0994cfed167451031a2e6ad0d816d5c489a5079fea990c1185ad191cf013b",
+                    "0x2cace2f8bff8f1b03ef8107a564987726458377393cf8de7847a7c76a8da0e59",
+                    "0xd4132d917ad859ec7448bc608246dd905b96ddfcd7009e4f786baf662f4553d8",
+                    "0x247c372f52c89484527b5f0fc14b9c3c575d1b3dcee8a6ad15eefc3c34020d39",
+                    "0x5e4141aa3b565f1035d5bd26a9c575d87e0f77e75f9d4b767d1baa8eac2ec72b",
+                    "0x09bc014814685cab75a283cc3777f045986a69e1ac444ce5ed28258650efccea"
+                  ]
+                },
+                "cached": true,
+                "generatedAt": "2026-09-08T22:11:28.882Z"
+              }
+            },
+            "at": "2026-09-08T22:11:29.076Z"
+          },
+          {
+            "stage": "verification",
+            "outcome": "pass",
+            "kind": "simulated",
+            "code": "PROOF_VERIFIED",
+            "title": "Native verifier accepted the proof",
+            "detail": "Read-only eth_call against the Creditcoin native verifier. This does not mean the destination application executed.",
+            "evidence": {
+              "block": {
+                "number": 5454336,
+                "hash": "0xcac0ae5443b0ae9e8a521d24266343230ed350e0d92d7a5a5450a6356cd7f47e"
+              },
+              "method": "eth_call",
+              "valid": true
+            },
+            "at": "2026-09-08T22:11:29.984Z"
+          },
+          {
+            "stage": "simulation",
+            "outcome": "unknown",
+            "kind": "observed",
+            "code": "DESTINATION_INPUT_NEEDED",
+            "title": "Destination call not supplied",
+            "detail": "Add the intended destination address, caller and calldata to simulate application execution. A source hash alone cannot reconstruct the worker call.",
+            "at": "2026-09-08T22:11:29.995Z"
+          }
+        ]
+      }
+    ]
+  }
+}
