@@ -1,8 +1,8 @@
 # Phase-3 preflight status — 2026-09-09
 
 **Issue #8 remains open and externally blocked.** Its prerequisite #7 is complete,
-but the selected project wallet, compatible deployments, balances, and signing
-access have not been supplied/verified. Issue #9 must remain blocked by #8.
+and a public project wallet is now supplied. Compatible deployments and signing
+access remain unverified; the wallet has no Creditcoin testnet gas. Issue #9 must remain blocked by #8.
 
 ## Verified now
 
@@ -43,14 +43,17 @@ mapping → rejection → registration → mint demonstration.
 
 ## Concrete outstanding resources
 
-1. **Public project wallet and externally confirmed signer control.** Supply the
-   public address to query balances; keep the key/password in the separate signer.
+1. **Externally confirmed signer control.** The selected public wallet is
+   `0x6CeD8D6Bad8Dfd2e60BCEA116fE74548f959f1F2`. The key/password stays in the
+   separate signer; ownership/unlock access has not yet been confirmed.
 2. **Actual compatible deployments.** Supply your source/minter/wrapped addresses,
    or use the prepared setup commands with the selected funded signer. Deployment
    receipts and runtime checks must agree before these count as verified.
-3. **Funding and test-token balances.** Sepolia gas, Creditcoin testnet gas, and
-   source test tokens remain unmeasured without the selected address/contracts.
-   The proposed burn is 1 TEST (10^18 raw units); it has not been sent.
+3. **Funding and test-token balances.** The selected wallet has
+   0.100587121015810964 Sepolia ETH at block 11666253 and 0 testnet CTC at
+   Creditcoin block 5456422. Creditcoin gas funding is required. Source test-token
+   balances await actual deployments. The proposed burn is 1 TEST (10^18 raw
+   units); it has not been sent. [Balance evidence](project-wallet-balances.json).
 4. **Initial bridge state.** Verify an empty emitter mapping, target ownership,
    and minter role. Registration must stay unset until the rejection demonstration.
 5. **Transaction cost evidence.** Estimate deployment/burn/registration gas and

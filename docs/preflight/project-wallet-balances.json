@@ -1,0 +1,25 @@
+{
+  "observedAt": "2026-09-09T06:54:38.093Z",
+  "wallet": "0x6CeD8D6Bad8Dfd2e60BCEA116fE74548f959f1F2",
+  "observations": [
+    {
+      "network": "Sepolia",
+      "chainId": 11155111,
+      "block": {
+        "number": 11666253,
+        "hash": "0x1998c05bdefdb3997615f48c568f50f02f5e0c152c86622d96a33254cffc00cc"
+      },
+      "balanceWei": "100587121015810964"
+    },
+    {
+      "network": "Creditcoin testnet",
+      "chainId": 102031,
+      "block": {
+        "number": 5456422,
+        "hash": "0x5e73a4683d91b21ff8d0783d10166e950028a49b76c45652d3481b9f713b6043"
+      },
+      "balanceWei": "0"
+    }
+  ],
+  "signerControl": "not-established-by-public-address"
+}
