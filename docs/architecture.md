@@ -1,13 +1,17 @@
-# Architecture: first working milestone
+# Architecture
 
 The user approved a TypeScript/Node core, SQLite persistence, React/Vite local UI,
 and official Attestcoin integration. This project is separate from the personal
-finance tracker in the parent directory. Build on `feat/proofops-foundation`.
+finance tracker in the parent directory. Work uses focused feature branches.
 
 ## Boundaries
 
 - `src/config.ts`: validate network configuration without returning secrets to the UI.
 - `src/network.ts`: bounded RPC requests and official SDK access.
+- `src/rpc.ts`: shared bounded transport with a fixed read-only RPC allowlist.
+- `src/bridge/`: pinned runtime identity, burn selection, configuration snapshots,
+  exact execute simulation, and destination mint correlation. See the
+  [bridge implementation notes](adapters/bridge-v1-build.md).
 - `src/engine.ts`: evidence collection and deterministic diagnostic rules.
 - `src/store.ts`: append attempts and preserve evidence in SQLite.
 - `src/server.ts`: loopback-only API and built dashboard assets.
@@ -22,7 +26,9 @@ its observation block and distinguished from a mined destination transaction.
 
 ## Case lifecycle
 
-A case has a source hash and optional destination call/transaction references.
+A case has a source hash and optional destination call/transaction references or
+versioned bridge context. Bridge context is available through the local API and
+v2 bundles; dedicated CLI/dashboard controls are tracked in issue #7.
 Every run creates an append-only attempt with ordered observations. Attempts end
 as `ready`, `waiting`, `blocked`, `failed`, or `incomplete`. A running attempt found
 after a restart is displayed as interrupted; an explicit rerun creates a new attempt.
@@ -36,7 +42,7 @@ must be explicit. Revalidate source canonicality before labeling a proof verifie
 
 ## Regression checks
 
-The first bundle supports an explicit `proof-valid` or `destination-call-succeeds`
+Generic v1 and bridge v2 bundles support an explicit `proof-valid` or `destination-call-succeeds`
 expectation and reruns against current state with locally configured endpoints.
 It cannot reconstruct a transaction's exact historical intra-block prestate.
 Unknown prerequisites and unavailable providers return inconclusive. No runtime

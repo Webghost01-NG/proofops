@@ -15,6 +15,16 @@ export interface CaseInput {
   sourceTx: string;
   destinationTx?: string;
   call?: CallInput;
+  bridge?: BridgeInputV1;
+}
+
+export interface BridgeInputV1 {
+  id: 'attestcoin-bridge-v1';
+  sourceEmitter: string;
+  minter: string;
+  expectedWrappedToken: string;
+  caller: string;
+  sourceLogIndex?: number;
 }
 
 export interface Observation {
@@ -66,7 +76,7 @@ export interface ReadinessCheck {
 }
 
 export interface CaseBundle {
-  format: 'proofops.case.v1';
+  format: 'proofops.case.v1' | 'proofops.case.v2';
   exportedAt: string;
   mode: 'current-state-check';
   expectation: 'proof-valid' | 'destination-call-succeeds';
