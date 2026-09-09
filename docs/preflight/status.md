@@ -41,6 +41,35 @@ conclusion was inferred from them. The profile was not weakened to accept sample
 Fresh custom deployments are the straightforward route for the intended empty
 mapping → rejection → registration → mint demonstration.
 
+## Project GitHub deployment search
+
+At the user's request, inspected 44 other nonempty public repositories and read
+113 selected README, deployment, broadcast and network configuration files from
+their current default branches. No Creditcoin/Attestcoin/102031/ASCMinter keyword
+matches appeared in those files. This is not an exhaustive search of every file,
+branch or historical deployment.
+
+Three actual candidates from [Veylott's deployment table](https://github.com/Webghost01-NG/veylott/blob/main/README.md)
+were checked on both chains:
+
+| Contract | Address | Sepolia code bytes | Creditcoin code bytes |
+|---|---|---|---|
+| USDCMock | `0x9b5Cd13b8eFbB58Dc25A05CF411D8056058aDFfF` | 2321 | 0 |
+| ConfidentialPool | `0x90F72615Be5f05A2ce9DCA540D756a4415CE0AD1` | 15002 | 0 |
+| cUSDCMock | `0x7c5BF43B851c1dff1a4feE8dB225b87f2C223639` | 170 | 0 |
+
+All three differ from the supported source/minter/wrapped runtimes. Reads used
+finalized Sepolia block 11666285 and Creditcoin block 5456451; both block hashes
+were rechecked. These are existing contracts, but they do not provide the required
+bridge behavior. [RelayPay's deployment table](https://github.com/Webghost01-NG/relaypay/blob/main/README.md)
+also lists its invoice registry and receipt NFT on Coston2, a different chain.
+
+[Repository scope, file URLs and actual on-chain evidence](repository-deployments.json)
+record this search. No candidate was adopted or transaction submitted. The next
+step remains funding the selected wallet with testnet CTC and deploying the three
+pinned contracts using the separate signer setup; their resulting addresses must
+pass the runtime and configuration checks before #8 can close.
+
 ## Concrete outstanding resources
 
 1. **Externally confirmed signer control.** The selected public wallet is
