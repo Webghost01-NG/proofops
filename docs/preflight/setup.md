@@ -149,3 +149,26 @@ Keep finalized balance/estimate observations, deployment receipts, signer-contro
 confirmation, and initial mapping/role identity together in #8. Only then can #9
 produce the first real burn. Proof service status does not promise that a future
 burn's proof will be available immediately; wait for its own attestation/proof.
+
+## Selected route: MetaMask browser signing
+
+The user selected this route instead of importing their MetaMask key. Installed
+Foundry supports the browser flags below. The account must be
+`0x6CeD8D6Bad8Dfd2e60BCEA116fE74548f959f1F2`.
+
+Use the deployment commands above with `--browser --browser-disable-open`
+in place of `--account "$PROOFOPS_DEMO_ACCOUNT"`, and add
+`--from "$PROOFOPS_DEMO_ADDRESS"` plus the reviewed gas limit/fee cap. Start one
+command at a time after estimating it. Select the intended chain in MetaMask
+before each Forge invocation. The source token uses Sepolia 11155111; minter and
+wrapped token use Creditcoin 102031.
+
+Open the loopback URL printed by Foundry (default `http://127.0.0.1:9545`) in the
+browser containing MetaMask. A remote workspace requires a local port forward;
+do not expose the wallet connection server publicly. Confirm account, chain,
+contract creation, zero native transfer value, and reviewed fee ceiling. Each
+command creates a temporary session; connection alone is not signing approval.
+No keystore import, private key, password, or seed phrase is needed.
+
+Record each actual receipt and check runtime identity before advancing to the
+next deployment. Leave the emitter mapping empty as described above.

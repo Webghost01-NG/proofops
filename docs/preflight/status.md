@@ -1,8 +1,9 @@
 # Phase-3 preflight status — 2026-09-09
 
 **Issue #8 remains open and externally blocked.** Its prerequisite #7 is complete,
-and a public project wallet is now supplied. Compatible deployments and signing
-access remain unverified; the wallet has no Creditcoin testnet gas. Issue #9 must remain blocked by #8.
+and a public project wallet is now supplied. The wallet is funded and the user
+selected MetaMask browser signing. Compatible deployments and a successful wallet
+connection remain unverified. Issue #9 must remain blocked by #8.
 
 ## Verified now
 
@@ -66,23 +67,25 @@ also lists its invoice registry and receipt NFT on Coston2, a different chain.
 
 [Repository scope, file URLs and actual on-chain evidence](repository-deployments.json)
 record this search. No candidate was adopted or transaction submitted. The next
-step remains funding the selected wallet with testnet CTC and deploying the three
-pinned contracts using the separate signer setup; their resulting addresses must
+step is deploying the three pinned contracts using the selected MetaMask browser
+signer; their resulting addresses must
 pass the runtime and configuration checks before #8 can close.
 
 ## Concrete outstanding resources
 
 1. **Externally confirmed signer control.** The selected public wallet is
    `0x6CeD8D6Bad8Dfd2e60BCEA116fE74548f959f1F2`. The key/password stays in the
-   separate signer; ownership/unlock access has not yet been confirmed.
+   separate signer. The user selected MetaMask; browser connection and actual
+   transaction approval remain outstanding.
 2. **Actual compatible deployments.** Supply your source/minter/wrapped addresses,
    or use the prepared setup commands with the selected funded signer. Deployment
    receipts and runtime checks must agree before these count as verified.
 3. **Funding and test-token balances.** The selected wallet has
-   0.100587121015810964 Sepolia ETH at block 11666253 and 0 testnet CTC at
-   Creditcoin block 5456422. Creditcoin gas funding is required. Source test-token
+   0.100587121015810964 Sepolia ETH at block 11666612 and 10,000 testnet CTC at
+   Creditcoin block 5456652 (latest-block observations). The earlier zero balance
+   in the historical balance evidence has been superseded. Source test-token
    balances await actual deployments. The proposed burn is 1 TEST (10^18 raw
-   units); it has not been sent. [Balance evidence](project-wallet-balances.json).
+   units); it has not been sent. [Current balances and estimates](browser-deployment-estimates.json).
 4. **Initial bridge state.** Verify an empty emitter mapping, target ownership,
    and minter role. Registration must stay unset until the rejection demonstration.
 5. **Transaction cost evidence.** Estimate deployment/burn/registration gas and
@@ -108,3 +111,17 @@ dependencies, database schema, and runtime configuration are unchanged in #8.
 
 No testnet transaction, faucet message, deployment, burn, registration, or mint
 was submitted during this preflight.
+
+## MetaMask deployment preparation
+
+The user selected browser signing on 2026-09-09. Installed `forge create --help`
+confirms `--browser`, `--browser-disable-open` and `--browser-port`. The official
+[Foundry browser-signing guide](https://www.getfoundry.sh/guides/browser-wallet)
+describes a loopback-only connection page and individual wallet approvals.
+
+Actual RPC estimates from the funded wallet: source creation 591856 gas; minter
+creation 1449076 gas. Proposed limits add 20% gas headroom and cap gas price at
+twice the observed price. Corresponding fee ceilings are 0.001558097001739696
+Sepolia ETH and 0.001738892 CTC. Balances cover these two estimates. Wrapped-token
+creation and later burn/registration/execute estimates are still outstanding.
+No deployment success or full phase-3 funding sufficiency is claimed.
