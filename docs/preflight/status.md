@@ -136,3 +136,12 @@ checked at the receipt block matches the pinned source profile.
 [Receipt and runtime evidence](source-deployment.json). A finalized-block check
 is still outstanding. Creditcoin minter and wrapped-token deployments remain
 outstanding; #8 is still open and #9 is blocked.
+
+The Creditcoin minter deployment also succeeded in block 5456737. Transaction:
+`0x127c5e19656c35b738963605b5f5b8b2356322da23df5f938d346a2accccc3b7`.
+Contract: `0x8cd2DA9E45D18c47A803f065a3625AE68bF37B17`. Direct RPC reads verified
+the successful receipt, exact creation input and matching minter runtime.
+[Receipt and identity evidence](minter-deployment.json). Forge's Alloy block
+watcher could not parse Creditcoin blocks missing `mixHash`; direct RPC reads
+confirmed the actual result without inventing a block field. The wrapped-token
+deployment and final configuration/finality checks remain outstanding.

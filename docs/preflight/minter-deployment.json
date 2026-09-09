@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-09-09T08:15:19.019Z",
+  "receipt": {
+    "transactionHash": "0x127c5e19656c35b738963605b5f5b8b2356322da23df5f938d346a2accccc3b7",
+    "transactionIndex": "0x0",
+    "blockHash": "0x04361081da82c7ab0b4281d12808962df5b5c78cf0581b753b9ed10eca3613ef",
+    "from": "0x6ced8d6bad8dfd2e60bcea116fe74548f959f1f2",
+    "to": null,
+    "blockNumber": "0x534361",
+    "cumulativeGasUsed": "0x153cba",
+    "gasUsed": "0x153cba",
+    "contractAddress": "0x8cd2da9e45d18c47a803f065a3625ae68bf37b17",
+    "logs": [],
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "status": "0x1",
+    "effectiveGasPrice": "0x1dcd6500",
+    "type": "0x2"
+  },
+  "identity": {
+    "role": "minter",
+    "address": "0x8cd2da9e45d18c47a803f065a3625ae68bf37b17",
+    "block": {
+      "number": 5456737,
+      "hash": "0x04361081da82c7ab0b4281d12808962df5b5c78cf0581b753b9ed10eca3613ef"
+    },
+    "verified": true,
+    "observedCodeHash": "0x5c066c240ad34cf9d385754dfe7ba3e2959aa8a8d72e2444fb6891aa0eb44216",
+    "expectedCodeHash": "0x5c066c240ad34cf9d385754dfe7ba3e2959aa8a8d72e2444fb6891aa0eb44216",
+    "observedExecutableHash": "0x5e8f7e6b75958ce926c18fa455ff49447dc0d7f267ae2c72c6090879744b0960",
+    "expectedExecutableHash": "0x5e8f7e6b75958ce926c18fa455ff49447dc0d7f267ae2c72c6090879744b0960",
+    "artifactSha256": "1b1521613488d077c80f8cecf035374d1a5d63e159f01a310e481d0fa3456e1c"
+  },
+  "finality": "receipt block; finalized check outstanding",
+  "toolingNote": "Forge submitted the wallet-approved transaction, but its Alloy block watcher failed to parse Creditcoin blocks missing mixHash. Receipt, creation input and runtime were verified with direct RPC reads. No block fields were fabricated."
+}
