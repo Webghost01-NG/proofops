@@ -86,6 +86,9 @@ adapters, automatic application-specific regression generation, worker instrumen
 and historical replay only where the runtime and provider capabilities permit it.
 
 See [architecture](docs/architecture.md) and [acceptance criteria](docs/acceptance.md).
+The next implementation milestone follows the pinned
+[bridge adapter specification](docs/adapters/bridge-v1.md) and its
+[acceptance matrix](docs/adapters/bridge-v1-acceptance.md).
 
 ## Upstream references
 
