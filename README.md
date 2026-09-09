@@ -76,6 +76,10 @@ The browser configuration also supports the system Chrome installation on this
 workspace. The local EVM integration test runs when `anvil` is available and is
 explicitly skipped otherwise; it never substitutes for native Creditcoin testing.
 
+The live bridge demo is currently waiting on the resources listed in the
+[phase-3 preflight](docs/preflight/status.md). The [setup runbook](docs/preflight/setup.md)
+keeps deployment and signing outside ProofOps.
+
 A real Sepolia transaction has passed source binding and native verification on
 Creditcoin testnet. See [the validation record](docs/validation.md) and its exported
 evidence. Destination application execution remains a separate milestone.

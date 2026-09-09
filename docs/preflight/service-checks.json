@@ -1,0 +1,26 @@
+{
+  "note": "Doctor results collected earlier in this preflight; exact native proof/block evidence is recorded separately.",
+  "checks": [
+    {
+      "name": "Source RPC",
+      "status": "ready",
+      "detail": "Connected to chain 11155111."
+    },
+    {
+      "name": "Creditcoin RPC",
+      "status": "ready",
+      "detail": "Connected to chain 102031."
+    },
+    {
+      "name": "Chain attestation",
+      "status": "ready",
+      "detail": "Source height 11666240 attested; observed at Creditcoin block 5456377."
+    },
+    {
+      "name": "Proof service",
+      "status": "ready",
+      "detail": "Service reports height 11666240. Proof generation is checked separately for each transaction."
+    }
+  ],
+  "recordedAt": "2026-09-09T06:49:29.607Z"
+}
