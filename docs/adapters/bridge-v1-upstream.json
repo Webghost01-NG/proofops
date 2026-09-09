@@ -1,0 +1,469 @@
+{
+  "format": "proofops.bridge-reference.v1",
+  "reviewedAt": "2026-09-09T05:36:54.918Z",
+  "repository": "https://github.com/gluwa/attestcoin-protocol-examples",
+  "revision": "6668487ad07fdf8119f54aab9db99b6c50155b5c",
+  "files": [
+    {
+      "path": "bridge/contracts/sol/ASCMinter.sol",
+      "sha256": "9dc790c3864724593a09cf4374cd9d5adae3de3619afe2c44812027f3fab24a4",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/bridge/contracts/sol/ASCMinter.sol"
+    },
+    {
+      "path": "bridge/contracts/sol/MintableToken.sol",
+      "sha256": "4dfc34a09342f361c948a9c971be615df17b15bda24d8979e8a76d6250f305e8",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/bridge/contracts/sol/MintableToken.sol"
+    },
+    {
+      "path": "bridge/contracts/sol/BridgeTestToken.sol",
+      "sha256": "e1d1a5646528ec5d12c30ab149bd685d2478a5bc1e5a60c0daa15cf98e5b33bc",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/bridge/contracts/sol/BridgeTestToken.sol"
+    },
+    {
+      "path": "shared/contracts/sol/TestERC20.sol",
+      "sha256": "d10a0f1b45979a619c2405a941fbeab34493051f59f20ddcf520f576a1185b3e",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/shared/contracts/sol/TestERC20.sol"
+    },
+    {
+      "path": "bridge/contracts/abi/ASCMinter.json",
+      "sha256": "590baf13307afa5d6acc050b199e310f7ed4c53d3997e9cbbf4289b0f746b091",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/bridge/contracts/abi/ASCMinter.json"
+    },
+    {
+      "path": "bridge/contracts/abi/BridgeTestToken.json",
+      "sha256": "e0d6ad5bdaca07802ae5a283e4807492ccbb7f0e9cb65b2166c9ac7b058d63b5",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/bridge/contracts/abi/BridgeTestToken.json"
+    },
+    {
+      "path": "shared/contracts/abi/TestERC20.json",
+      "sha256": "3eca2106d1fa2213d9ed7c7eed03a7760aa5c2dde1df1431f9778c84922f111c",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/shared/contracts/abi/TestERC20.json"
+    },
+    {
+      "path": "bridge/bridge-offchain-worker/worker.ts",
+      "sha256": "4be1092318db1ae9bed86a0f6d6e69d3e71ea28b02638e456cdd1e60ab36c372",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/bridge/bridge-offchain-worker/worker.ts"
+    },
+    {
+      "path": "shared/utils/index.ts",
+      "sha256": "b45d7fc4097302ab9f188579d954a5daa551543b597ced663a4f712eb9047ea0",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/shared/utils/index.ts"
+    },
+    {
+      "path": "bridge/test/ASCMinterSecurity.t.sol",
+      "sha256": "54a604cdb441681f9aac8e228b8f2ca5bdea526ddc027248d1e9ae1fc2fda9e0",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/bridge/test/ASCMinterSecurity.t.sol"
+    },
+    {
+      "path": "bridge/test/ASCMinterBurnLog.t.sol",
+      "sha256": "6c266c833adbfda766693139f0ff43e88b9eed0a394e1a7a7126d0ca49c51a53",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/bridge/test/ASCMinterBurnLog.t.sol"
+    },
+    {
+      "path": "bridge/foundry.toml",
+      "sha256": "c3ead62058b1f0a1e7222c0c8acff28f957c6848d6d13c7b4206e810d864b02a",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/bridge/foundry.toml"
+    },
+    {
+      "path": "package.json",
+      "sha256": "9b52c026ba2cad00722a2087f6dc59e1d61978b767942f2d651a396e37709bfe",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/package.json"
+    },
+    {
+      "path": "yarn.lock",
+      "sha256": "cada3e61941b45464009c8b187234ce75b6fe48b4e6fc55a5ff9a2733497318f",
+      "url": "https://github.com/gluwa/attestcoin-protocol-examples/blob/6668487ad07fdf8119f54aab9db99b6c50155b5c/yarn.lock"
+    }
+  ],
+  "package": {
+    "name": "@gluwa/asc-contracts",
+    "version": "0.2.1",
+    "integrity": "sha512-3/zVx8ElFewTB0Xy06xJ/uPYfvFI1usOe/ilxoM5SNT9Cf47ML/YW41Pq00NttxuOPLkh8HnRlPgD1n66ritLA==",
+    "files": [
+      {
+        "path": "contracts/readability/ASCBase.sol",
+        "sha256": "ff24791a29b1b5477088ec2e36a4960768ec79178817458c6e77c2a4ce3b9f3c"
+      },
+      {
+        "path": "contracts/common/EvmV1Decoder.sol",
+        "sha256": "2de1a8faf7b203c33a08db73e7a79e0523c4a84580c9c75ce209df0d5bf2e692"
+      },
+      {
+        "path": "contracts/write-ability/common/INativeQueryVerifier.sol",
+        "sha256": "bc81982eb4070d3a5519346c868c73eff177b7c514ef2befae6cadfe9cddd1ed"
+      }
+    ]
+  },
+  "build": {
+    "solc": "0.8.30",
+    "optimizer": true,
+    "optimizerRuns": 200,
+    "viaIR": true,
+    "evmVersion": "shanghai",
+    "openzeppelin": "5.4.0",
+    "forgeStdRevision": "16cb9c998736cab8f14aebd5199cdf6a02fde055"
+  },
+  "abis": {
+    "ASCMinter": {
+      "path": "bridge/contracts/abi/ASCMinter.json",
+      "compiledAbiChecked": true,
+      "entries": [
+        {
+          "type": "error",
+          "signature": "InvalidAction(uint8)",
+          "selector": "0x2f2938ce"
+        },
+        {
+          "type": "event",
+          "signature": "EmitterRegistered(address,address)",
+          "topic": "0xc5ffd4480cde31adabeb2a71823fbbbbb9ab6ff798911f6ae8508a7a247ec78e"
+        },
+        {
+          "type": "event",
+          "signature": "TokensMinted(address,address,uint256,bytes32)",
+          "topic": "0x91dd2cbfd54587f3aef7d0966c4185fae943cc4fe9e40877d4d7f2be4ec46e80"
+        },
+        {
+          "type": "function",
+          "signature": "BURN_EVENT_SIGNATURE()",
+          "selector": "0xe2794565"
+        },
+        {
+          "type": "function",
+          "signature": "VERIFIER()",
+          "selector": "0x08c84e70"
+        },
+        {
+          "type": "function",
+          "signature": "execute(uint8,uint64,uint64,bytes,bytes32,(bytes32,bool)[],bytes32,bytes32[])",
+          "selector": "0xc6339bf7"
+        },
+        {
+          "type": "function",
+          "signature": "processedQueries(bytes32)",
+          "selector": "0x33cc99ab"
+        },
+        {
+          "type": "function",
+          "signature": "wrapOriginToken(address,address)",
+          "selector": "0x286125b9"
+        },
+        {
+          "type": "function",
+          "signature": "wrappedTokens(address)",
+          "selector": "0xd5c6b504"
+        }
+      ]
+    },
+    "BridgeTestToken": {
+      "path": "bridge/contracts/abi/BridgeTestToken.json",
+      "compiledAbiChecked": true,
+      "entries": [
+        {
+          "type": "error",
+          "signature": "AccessControlBadConfirmation()",
+          "selector": "0x6697b232"
+        },
+        {
+          "type": "error",
+          "signature": "AccessControlUnauthorizedAccount(address,bytes32)",
+          "selector": "0xe2517d3f"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InsufficientAllowance(address,uint256,uint256)",
+          "selector": "0xfb8f41b2"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InsufficientBalance(address,uint256,uint256)",
+          "selector": "0xe450d38c"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InvalidApprover(address)",
+          "selector": "0xe602df05"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InvalidReceiver(address)",
+          "selector": "0xec442f05"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InvalidSender(address)",
+          "selector": "0x96c6fd1e"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InvalidSpender(address)",
+          "selector": "0x94280d62"
+        },
+        {
+          "type": "error",
+          "signature": "OwnableInvalidOwner(address)",
+          "selector": "0x1e4fbdf7"
+        },
+        {
+          "type": "error",
+          "signature": "OwnableUnauthorizedAccount(address)",
+          "selector": "0x118cdaa7"
+        },
+        {
+          "type": "event",
+          "signature": "Approval(address,address,uint256)",
+          "topic": "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925"
+        },
+        {
+          "type": "event",
+          "signature": "OwnershipTransferred(address,address)",
+          "topic": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        },
+        {
+          "type": "event",
+          "signature": "RoleAdminChanged(bytes32,bytes32,bytes32)",
+          "topic": "0xbd79b86ffe0ab8e8776151514217cd7cacd52c909f66475c3af44e129f0b00ff"
+        },
+        {
+          "type": "event",
+          "signature": "RoleGranted(bytes32,address,address)",
+          "topic": "0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d"
+        },
+        {
+          "type": "event",
+          "signature": "RoleRevoked(bytes32,address,address)",
+          "topic": "0xf6391f5c32d9c69d2a47ea670b442974b53935d1edc7fd64eb21e047a839171b"
+        },
+        {
+          "type": "event",
+          "signature": "Transfer(address,address,uint256)",
+          "topic": "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+        },
+        {
+          "type": "function",
+          "signature": "DEFAULT_ADMIN_ROLE()",
+          "selector": "0xa217fddf"
+        },
+        {
+          "type": "function",
+          "signature": "allowance(address,address)",
+          "selector": "0xdd62ed3e"
+        },
+        {
+          "type": "function",
+          "signature": "approve(address,uint256)",
+          "selector": "0x095ea7b3"
+        },
+        {
+          "type": "function",
+          "signature": "balanceOf(address)",
+          "selector": "0x70a08231"
+        },
+        {
+          "type": "function",
+          "signature": "decimals()",
+          "selector": "0x313ce567"
+        },
+        {
+          "type": "function",
+          "signature": "getRoleAdmin(bytes32)",
+          "selector": "0x248a9ca3"
+        },
+        {
+          "type": "function",
+          "signature": "grantRole(bytes32,address)",
+          "selector": "0x2f2ff15d"
+        },
+        {
+          "type": "function",
+          "signature": "hasRole(bytes32,address)",
+          "selector": "0x91d14854"
+        },
+        {
+          "type": "function",
+          "signature": "mint(address,uint256)",
+          "selector": "0x40c10f19"
+        },
+        {
+          "type": "function",
+          "signature": "name()",
+          "selector": "0x06fdde03"
+        },
+        {
+          "type": "function",
+          "signature": "owner()",
+          "selector": "0x8da5cb5b"
+        },
+        {
+          "type": "function",
+          "signature": "renounceOwnership()",
+          "selector": "0x715018a6"
+        },
+        {
+          "type": "function",
+          "signature": "renounceRole(bytes32,address)",
+          "selector": "0x36568abe"
+        },
+        {
+          "type": "function",
+          "signature": "revokeRole(bytes32,address)",
+          "selector": "0xd547741f"
+        },
+        {
+          "type": "function",
+          "signature": "supportsInterface(bytes4)",
+          "selector": "0x01ffc9a7"
+        },
+        {
+          "type": "function",
+          "signature": "symbol()",
+          "selector": "0x95d89b41"
+        },
+        {
+          "type": "function",
+          "signature": "totalSupply()",
+          "selector": "0x18160ddd"
+        },
+        {
+          "type": "function",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb"
+        },
+        {
+          "type": "function",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd"
+        },
+        {
+          "type": "function",
+          "signature": "transferOwnership(address)",
+          "selector": "0xf2fde38b"
+        }
+      ]
+    },
+    "TestERC20": {
+      "path": "shared/contracts/abi/TestERC20.json",
+      "compiledAbiChecked": false,
+      "entries": [
+        {
+          "type": "error",
+          "signature": "ERC20InsufficientAllowance(address,uint256,uint256)",
+          "selector": "0xfb8f41b2"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InsufficientBalance(address,uint256,uint256)",
+          "selector": "0xe450d38c"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InvalidApprover(address)",
+          "selector": "0xe602df05"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InvalidReceiver(address)",
+          "selector": "0xec442f05"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InvalidSender(address)",
+          "selector": "0x96c6fd1e"
+        },
+        {
+          "type": "error",
+          "signature": "ERC20InvalidSpender(address)",
+          "selector": "0x94280d62"
+        },
+        {
+          "type": "event",
+          "signature": "Approval(address,address,uint256)",
+          "topic": "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925"
+        },
+        {
+          "type": "event",
+          "signature": "TokensBurnedForBridging(address,uint256)",
+          "topic": "0x17dc4d6f69d484e59be774c29b47d2fa4c14af2e01df42fc5643ac968f4d427e"
+        },
+        {
+          "type": "event",
+          "signature": "Transfer(address,address,uint256)",
+          "topic": "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+        },
+        {
+          "type": "function",
+          "signature": "BURN_ADDRESS()",
+          "selector": "0xfccc2813"
+        },
+        {
+          "type": "function",
+          "signature": "allowance(address,address)",
+          "selector": "0xdd62ed3e"
+        },
+        {
+          "type": "function",
+          "signature": "approve(address,uint256)",
+          "selector": "0x095ea7b3"
+        },
+        {
+          "type": "function",
+          "signature": "balanceOf(address)",
+          "selector": "0x70a08231"
+        },
+        {
+          "type": "function",
+          "signature": "burn(uint256)",
+          "selector": "0x42966c68"
+        },
+        {
+          "type": "function",
+          "signature": "decimals()",
+          "selector": "0x313ce567"
+        },
+        {
+          "type": "function",
+          "signature": "mint(uint256)",
+          "selector": "0xa0712d68"
+        },
+        {
+          "type": "function",
+          "signature": "name()",
+          "selector": "0x06fdde03"
+        },
+        {
+          "type": "function",
+          "signature": "symbol()",
+          "selector": "0x95d89b41"
+        },
+        {
+          "type": "function",
+          "signature": "totalSupply()",
+          "selector": "0x18160ddd"
+        },
+        {
+          "type": "function",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb"
+        },
+        {
+          "type": "function",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd"
+        }
+      ]
+    }
+  },
+  "constants": {
+    "ASC_MINTER": "0x95e812e3b9a016cb4128c51de0d31e5bb721f5bf6d8a4633477ff1d38cb964f7",
+    "nativeVerifier": "0x0000000000000000000000000000000000000FD2"
+  },
+  "validation": {
+    "upstreamContractTests": {
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "nativeVerification": "Mocked by upstream unit harness; not a live Creditcoin integration test."
+    },
+    "deploymentIdentity": "No deployed bridge identity is asserted by this reference manifest."
+  }
+}
