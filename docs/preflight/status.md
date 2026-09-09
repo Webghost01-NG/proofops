@@ -109,8 +109,8 @@ deployment. It never reports complete signer/funding readiness automatically.
 The built core's existing native-proof check also passed; application code, UI,
 dependencies, database schema, and runtime configuration are unchanged in #8.
 
-No testnet transaction, faucet message, deployment, burn, registration, or mint
-was submitted during this preflight.
+The preparation above preceded deployment. See the deployment progress below
+for the first approved transaction. No burn, registration or mint has been sent.
 
 ## MetaMask deployment preparation
 
@@ -125,3 +125,14 @@ twice the observed price. Corresponding fee ceilings are 0.001558097001739696
 Sepolia ETH and 0.001738892 CTC. Balances cover these two estimates. Wrapped-token
 creation and later burn/registration/execute estimates are still outstanding.
 No deployment success or full phase-3 funding sufficiency is claimed.
+
+## Deployment progress
+
+The user approved the source-token deployment through MetaMask on Sepolia.
+Transaction `0x03c2c0ce68ff07027c2526863a55baacca761cb3bbd31a63d43233b6c2f6f6be`
+succeeded in block 11666696, creating
+`0x809d323140d05024fC06E8C38F8bfAD3Bd423203`. Gas used: 586038. Runtime identity
+checked at the receipt block matches the pinned source profile.
+[Receipt and runtime evidence](source-deployment.json). A finalized-block check
+is still outstanding. Creditcoin minter and wrapped-token deployments remain
+outstanding; #8 is still open and #9 is blocked.
