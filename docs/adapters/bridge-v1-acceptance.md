@@ -80,3 +80,62 @@ transport extraction; see [the validation record](../validation.md).
 Build inspection resolved the initial linked-decoder assumption: the decoder is
 inlined, and the minter artifact has no library links. Runtime fingerprints and
 strict v2 compatibility are documented in [the implementation notes](bridge-v1-build.md).
+
+## Phase-2 interface gate (#7)
+
+Reviewed on 2026-09-09. The table below reviews every original acceptance row.
+“Pass” applies to the phase-2 implementation/test scope. The specified live
+extensions retain their own phase-3 blockers; they are not satisfied by fixtures.
+
+| Row | Phase-2 result and evidence | Later gate |
+|---|---|---|
+| B01 | Pass: core proof chain/height/hash/bytes mismatch vectors and unsupported bridge network checks stop generation. | — |
+| B02 | Pass: strict backend validation plus CLI invalid-index/profile/option checks and focused dashboard error display. | — |
+| B03 | Pass: existing pending/revert/provider tests; real local API and CLI preserve missing-configuration attempts. | — |
+| B04 | Pass: selection identity vectors and actual Anvil burn/SDK encoding; CLI/UI expose decoded recipient and raw amount. | — |
+| B05 | Pass: event recipient differs from caller in isolated source/mint tests. | — |
+| B06 | Pass: missing/malformed/unsupported-type vectors; no later-event substitution. | — |
+| B07 | Pass: receipt-order candidates, wrong-emitter and later-index rejection; keyboard first-burn confirmation fills a new inspection in desktop/mobile tests. | — |
+| B08 | Pass: zero/max uint256 and high-padding vectors preserve exact decimal strings. | — |
+| B09 | Pass: native-index mismatch stops replay reads and simulation in RPC/engine tests. | — |
+| B10 | Pass: independent 72-byte packing checks with nonzero and boundary fields. | — |
+| B11 | Pass: unit empty-mapping/full-revert correlation; real local registration reads; owner/mapping visible in CLI/UI. | Live rejection [#10](https://github.com/Webghost01-NG/proofops/issues/10). |
+| B12 | Pass: wrong-map vectors and immutable-mapping explanation; UI summary cannot report intended-token success for a mapping mismatch. | — |
+| B13 | Pass: separate-owner and missing-role vectors; actual owner/role reads; UI labels owner as registration signer, not execution caller. | — |
+| B14 | Pass: proof success remains distinct from revert, malformed return, and unavailable identity; only ABI true passes. | — |
+| B15 | Pass: RPC snapshot/simulation share recorded block; read-only RPC allowlist; interfaces state that simulation sends no transaction. | Live simulation [#11](https://github.com/Webghost01-NG/proofops/issues/11). |
+| B16 | Pass: replay diagnosis and attempt-history vectors; the seven pinned upstream contract tests reviewed in #5 cover rollback with a named native-verifier test double. | Real replay/rollback sequence [#10](https://github.com/Webghost01-NG/proofops/issues/10)/[#11](https://github.com/Webghost01-NG/proofops/issues/11). |
+| B17 | Pass: executable mismatch, metadata/compiler boundaries, verifier immutables, and historical wrong-verifier negatives. | Actual deployment identity [#8](https://github.com/Webghost01-NG/proofops/issues/8). |
+| B18 | Pass: pinned RPC parameters and snapshot mismatch cases; Anvil observes registration changes across recorded blocks. | — |
+| B19 | Pass: positive synthetic correlation requires exact calldata/source/query and two event emitters; actual signed receipt read exercised locally. | Real confirmed mint [#11](https://github.com/Webghost01-NG/proofops/issues/11). |
+| B20 | Pass: wrong emitter/query/token/recipient/amount, invalid calldata/mapping/verifier, absent and duplicate event negatives. | — |
+| B21 | Pass: synthetic destination relayer differs from recipient while binding still holds. | — |
+| B22 | Pass: direct-call restriction and exact executable profile reject unsupported layouts/code/networks. | — |
+| B23 | Pass: source/destination reorg and nonfinal receipt vectors; summary distinguishes invalidated source proof. | — |
+| B24 | Pass: v1/v2 core compatibility; separate CLI processes persist/rerun/export/check bridge inputs; browser reload and real API exports retain both attempts. | — |
+| B25 | Pass: desktop 1440×1080 and mobile 390×844; keyboard submission/confirmation, focused invalid-index error, history, export, no page overflow or console/page errors. | — |
+| B26 | Outside phase 2; remains unfulfilled until real deployment/funding preflight. | [#8](https://github.com/Webghost01-NG/proofops/issues/8). |
+| B27 | Outside phase 2; no live bridge failure-to-mint claim. | [#9](https://github.com/Webghost01-NG/proofops/issues/9) → [#10](https://github.com/Webghost01-NG/proofops/issues/10) → [#11](https://github.com/Webghost01-NG/proofops/issues/11). |
+| B28 | Pass: persisted engine history plus CLI/shared presentation and desktop/mobile tests distinguish current replay from historical mint. | Reusable expectation [#12](https://github.com/Webghost01-NG/proofops/issues/12). |
+| B29 | Outside phase 2; current call expectation remains explicit and cannot promise a second mint. | [#12](https://github.com/Webghost01-NG/proofops/issues/12). |
+
+Validation: TypeScript checks and production build pass; 41 automated tests pass
+with no skips; 6 Playwright flows pass. New interface checks are in
+`test/bridge-interfaces.test.ts` and `test/browser/bridge.spec.ts`. The browser
+presentation-only fixtures are explicitly isolated from product RPC behavior.
+
+No unresolved required phase-2 row remains. No new dependency, schema, server
+endpoint, signer, environment configuration, or deployed contract was introduced.
+[Workflow instructions](../bridge-workflow.md) explain the supported profile,
+input-copy/new-case behavior, immutable reruns, CLI exit codes, and v2 exports.
+
+### Interface screenshots
+
+These captures use synthetic test inputs. The form runs against the real local
+API with source RPC missing; the mint/replay screen uses a named presentation
+fixture and is **not live chain evidence**.
+
+- [Desktop bridge form](../images/bridge-form-desktop.png).
+- [Mobile bridge form](../images/bridge-form-mobile.png).
+- [Desktop mint/replay presentation fixture](../images/bridge-replay-fixture-desktop.png).
+- [Mobile mint/replay presentation fixture](../images/bridge-replay-fixture-mobile.png).

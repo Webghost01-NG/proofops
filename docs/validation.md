@@ -44,8 +44,7 @@ and transaction reference.
 
 ## Remaining work and limits
 
-- Expose the implemented bridge adapter through dedicated CLI/dashboard controls,
-  then run the funded bridge demonstration: emitter rejection, corrected
+- Run the funded bridge demonstration with the completed CLI/dashboard adapter: emitter rejection, corrected
   configuration, successful simulation, and actual mint.
 - The bridge profile provides application-specific assertions. Arbitrary
   destination receipts still do not prove an expected business outcome.
@@ -76,3 +75,19 @@ The existing real Sepolia evidence bundle was rerun with the updated core:
 [Fresh exported evidence](evidence/bridge-adapter-core-recheck.json) preserves
 that read-only observation. It verifies the generic proof path after the RPC
 refactor; it does not establish a source bridge burn or destination mint.
+
+## Bridge interfaces and phase-2 exit (#7)
+
+On 2026-09-09, 41 automated tests passed with no skips, including separate-process
+CLI validation, context persistence, rerun/export/check, historical attempt
+selection, and inconclusive exit for unresolved burn selection. Type checks and
+the production build passed. Six desktop/mobile browser flows passed: existing
+workspace behavior plus bridge form validation, accessible event confirmation,
+v2 export, reload/history, and separate proof/simulation/mint presentation.
+
+Screenshots were visually reviewed at both widths. Presentation fixtures remain
+under `test/`; no synthetic mint is included as product activity. The
+[row-by-row phase-2 review](adapters/bridge-v1-acceptance.md#phase-2-interface-gate-7)
+records all original criteria and links the still-unfulfilled phase-3/live and
+phase-4/regression gates. Actual bridge deployment and funding preflight (#8)
+is next. The live native-proof evidence recorded under #6 remains separate.

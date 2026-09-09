@@ -8,6 +8,7 @@ import { checkExpectation, inspectCase } from './engine.js';
 import { exportBundle, readBundle } from './bundle.js';
 import { caseInput, InputError, json, publicError } from './validation.js';
 import { makeServer } from './server.js';
+import { bridgeSummary, burnCandidates, observationBlocks, stageLabels } from './evidence-view.js';
 import type { CaseRecord } from './types.js';
 
 const help = `ProofOps — Attestcoin diagnostics, backed by evidence
@@ -16,10 +17,12 @@ Usage: proofops <command> [options]
 
   doctor                         Check configured networks and proof service
   inspect --source-tx <hash>      Inspect and persist a source transaction
+          [--bridge <file.json>]  Decode a pinned bridge burn and derive its call
+          [--source-log-index <n>] Confirm the first burn (requires --bridge)
           [--call <file.json>]    Add exact destination call inputs
           [--destination-tx <h>]  Attach an observed destination receipt
   list                           List saved cases
-  show <case-id>                  Explain the latest attempt
+  show <case-id> [--attempt <n>]  Explain latest or a numbered attempt (1-based)
   rerun <case-id>                 Append a fresh inspection attempt
   export <case-id> --out <file>   Export evidence and a current-state expectation
   check <bundle.json>             Evaluate a bundle against current state
@@ -27,6 +30,8 @@ Usage: proofops <command> [options]
 
 Add --json for machine-readable output. Configuration loads from local .env.
 No wallet key is required. No commands sign or broadcast transactions.
+Bridge JSON: id, sourceEmitter, minter, expectedWrappedToken, caller; optional sourceLogIndex.
+Use a new inspect for changed inputs; rerun preserves inputs and appends evidence.
 Exit codes: 0 ready/pass, 1 failed, 2 blocked/waiting/inconclusive, 64 invalid input.
 `;
 
@@ -37,11 +42,23 @@ async function readJson(path: string): Promise<unknown> {
   try { return JSON.parse(text); } catch { throw new InputError('Input file is not valid JSON.'); }
 }
 
-function explain(record: CaseRecord) {
-  const attempt = record.attempts.at(-1);
+function explain(record: CaseRecord, index?: number) {
+  const attempt = index === undefined ? record.attempts.at(-1) : record.attempts[index];
   console.log(`\nCase ${record.id}\nSource ${record.input.sourceTx}\nStatus: ${attempt?.status ?? 'not run'}\n`);
+  if (record.input.bridge) {
+    console.log(`Bridge context: ${json(record.input.bridge)}\n`);
+    for (const item of bridgeSummary(attempt)) console.log(`${item.label}: ${item.value}`);
+    const selection = attempt?.observations.find(o => o.code === 'BRIDGE_BURN_SELECTED')?.evidence?.selection as { recipient: string; amount: string; logIndex: number } | undefined;
+    if (selection) console.log(`Selected burn: global log ${selection.logIndex}, recipient ${selection.recipient}, raw amount ${selection.amount}`);
+    const snapshot = attempt?.observations.find(o => o.evidence?.snapshot)?.evidence?.snapshot as { targetOwner?: string; wrappedToken?: string; minterRole?: boolean } | undefined;
+    if (snapshot?.wrappedToken) console.log(`Observed mapping: ${snapshot.wrappedToken}; target owner: ${snapshot.targetOwner}; minter role: ${snapshot.minterRole}`);
+    console.log('Use --json or export for complete proof, generated calldata, and runtime identity evidence.');
+    for (const [i, candidate] of burnCandidates(attempt).entries()) console.log(`Burn candidate: global log ${candidate.logIndex}, receipt offset ${candidate.receiptOffset}, emitter ${candidate.address}${i === 0 ? ' (first match)' : ' (not executable)'} `);
+    if (attempt?.observations.some(o => o.code === 'BRIDGE_LOG_SELECTION_REQUIRED')) console.log('Confirm the first global log index with inspect --source-tx <same hash> --bridge <same file> --source-log-index <index>. This saves a new case.');
+  }
   for (const o of attempt?.observations ?? []) {
-    console.log(`[${o.outcome.toUpperCase()}] ${o.title}\n  ${o.detail}`);
+    console.log(`[${stageLabels[o.stage]} / ${o.kind} / ${o.outcome.toUpperCase()}] ${o.title}\n  ${o.detail}`);
+    for (const b of observationBlocks(o)) console.log(`  ${b.label}: ${b.number} (${b.hash})`);
     const decoded = o.evidence?.decodedError as { name: string; args: string[] } | undefined;
     if (decoded) console.log(`  Decoded: ${decoded.name}(${decoded.args.join(', ')})`);
   }
@@ -50,11 +67,15 @@ function explain(record: CaseRecord) {
 
 async function main() {
   const args = parseArgs({ allowPositionals: true, options: {
-    'source-tx': { type: 'string' }, 'destination-tx': { type: 'string' }, call: { type: 'string' },
+    'source-tx': { type: 'string' }, 'destination-tx': { type: 'string' }, call: { type: 'string' }, bridge: { type: 'string' },
+    'source-log-index': { type: 'string' }, attempt: { type: 'string' },
     out: { type: 'string' }, port: { type: 'string' }, json: { type: 'boolean' }, help: { type: 'boolean', short: 'h' }
   } });
   const [command, identifier] = args.positionals;
   if (!command || args.values.help || command === 'help') { console.log(help); return; }
+  if (['source-tx', 'destination-tx', 'call', 'bridge', 'source-log-index'].some(key => args.values[key as keyof typeof args.values] !== undefined) && command !== 'inspect') throw new InputError('Inspection input options are only accepted by inspect; rerun keeps saved inputs.');
+  if (args.values['source-log-index'] !== undefined && !args.values.bridge) throw new InputError('--source-log-index requires --bridge.');
+  if (args.values.attempt !== undefined && (command !== 'show' || !/^[1-9]\d*$/.test(args.values.attempt) || !Number.isSafeInteger(Number(args.values.attempt)))) throw new InputError('--attempt requires show and a positive integer.');
   try { process.loadEnvFile(); } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw new InputError('Local .env could not be read.'); }
   const config = loadConfig();
   if (command === 'doctor') {
@@ -89,7 +110,14 @@ async function main() {
         break;
       }
       case 'inspect': {
-        const input = caseInput({ sourceTx: args.values['source-tx'], destinationTx: args.values['destination-tx'], ...(args.values.call ? { call: await readJson(args.values.call) } : {}) });
+        let bridge = args.values.bridge ? await readJson(args.values.bridge) : undefined;
+        if (args.values['source-log-index'] !== undefined) {
+          const index = args.values['source-log-index'];
+          if (!/^\d+$/.test(index) || !Number.isSafeInteger(Number(index))) throw new InputError('Source log index must be a non-negative safe integer.');
+          if (!bridge || typeof bridge !== 'object' || Array.isArray(bridge)) throw new InputError('Bridge input must be a JSON object.');
+          bridge = { ...bridge, sourceLogIndex: Number(index) };
+        }
+        const input = caseInput({ ...(bridge !== undefined ? { bridge } : {}), sourceTx: args.values['source-tx'], destinationTx: args.values['destination-tx'], ...(args.values.call ? { call: await readJson(args.values.call) } : {}) });
         record = await inspectCase(store, store.create(input, config).id, config);
         break;
       }
@@ -101,6 +129,7 @@ async function main() {
       case 'show':
         if (!identifier) throw new InputError('Provide a case ID.');
         record = store.get(identifier);
+        if (args.values.attempt && Number(args.values.attempt) > record.attempts.length) throw new InputError('Attempt does not exist in this case.');
         break;
       case 'rerun':
         if (!identifier) throw new InputError('Provide a case ID.');
@@ -126,9 +155,11 @@ async function main() {
       default: throw new InputError(`Unknown command. Run proofops --help.`);
     }
     if (record) {
-      if (args.values.json) console.log(json(record)); else explain(record);
-      const status = record.attempts.at(-1)?.status;
-      process.exitCode = status === 'ready' ? 0 : status === 'failed' ? 1 : 2;
+      const index = args.values.attempt ? Number(args.values.attempt) - 1 : undefined;
+      const attempt = index === undefined ? record.attempts.at(-1) : record.attempts[index];
+      if (args.values.json) console.log(json(index === undefined ? record : { record, selectedAttempt: attempt })); else explain(record, index);
+      const bridgeResult = record.input.bridge && attempt ? checkExpectation(attempt, 'destination-call-succeeds') : undefined;
+      process.exitCode = bridgeResult ? bridgeResult === 'pass' ? 0 : bridgeResult === 'fail' ? 1 : 2 : attempt?.status === 'ready' ? 0 : attempt?.status === 'failed' ? 1 : 2;
     }
   } finally { if (!serving) { store.interruptOwn(); store.close(); } }
 }

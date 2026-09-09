@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { CaseRecord, Observation, ReadinessCheck, Stage } from '../src/types';
+import { BridgeDetails } from './bridge-details';
+import { observationBlocks, stageLabels } from '../src/evidence-view';
 import './style.css';
 
 type Config = { sourceConfigured: boolean; sourceChainId: number; creditcoinChainId: number; sourceChainKey: number; networkLabel: string };
@@ -41,6 +43,7 @@ const short = (value: string) => `${value.slice(0, 8)}…${value.slice(-6)}`;
 const time = (value: string) => new Date(value).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 const labels: Record<string, string> = { ready: 'Proof verified', running: 'Inspecting', waiting: 'Waiting', blocked: 'Needs setup', failed: 'Attention', incomplete: 'Incomplete', interrupted: 'Interrupted' };
 const stages: { key: Stage; label: string }[] = [
+  { key: 'configuration', label: 'Configuration' },
   { key: 'source', label: 'Source transaction' }, { key: 'attestation', label: 'Attestation' },
   { key: 'proof', label: 'Proof generation' }, { key: 'verification', label: 'Native verification' },
   { key: 'simulation', label: 'Destination simulation' }, { key: 'destination', label: 'Destination receipt' }
@@ -54,7 +57,8 @@ function ObservationCard({ observation }: { observation: Observation }) {
   const o = observation;
   return <article className={`observation observation-${o.outcome}`}>
     <div className="observation-icon"><Icon name={o.outcome === 'pass' ? 'check' : o.outcome === 'wait' ? 'clock' : o.outcome === 'fail' || o.outcome === 'unavailable' ? 'alert' : 'search'} size={16} /></div>
-    <div className="observation-content"><div className="observation-title"><h3>{o.title}</h3><span className="evidence-kind">{o.kind}</span></div><p>{o.detail}</p>
+    <div className="observation-content"><div className="observation-title"><h3>{o.title}</h3><span className="evidence-kind">{stageLabels[o.stage]} · {o.kind}</span></div><p>{o.detail}</p>
+      {observationBlocks(o).map(b => <p className="block-reference" key={`${b.number}-${b.hash}`}>{b.label} {b.number}<code>{b.hash}</code></p>)}
       {o.evidence && <details><summary>View evidence <span>{o.code}</span></summary><pre>{JSON.stringify(o.evidence, null, 2)}</pre></details>}
     </div>
   </article>;
@@ -73,6 +77,9 @@ function App() {
   const [hash, setHash] = useState('');
   const [destinationHash, setDestinationHash] = useState('');
   const [callJson, setCallJson] = useState('');
+  const [mode, setMode] = useState('generic');
+  const [bridgeFields, setBridgeFields] = useState({ sourceEmitter: '', minter: '', expectedWrappedToken: '', caller: '' });
+  const [sourceLogIndex, setSourceLogIndex] = useState('');
   const [query, setQuery] = useState('');
   const [checks, setChecks] = useState<ReadinessCheck[] | null>(null);
   const [checking, setChecking] = useState(false);
@@ -102,8 +109,10 @@ function App() {
     return () => { controller.abort(); clearInterval(interval); };
   }, []);
 
+  useEffect(() => { if (error) document.getElementById('request-error')?.focus(); }, [error]);
+
   async function selectCase(id: string) {
-    selectedId.current = id; setAttemptIndex(-1); setError(''); setPage('cases');
+    selectedId.current = id; setAttemptIndex(-1); setError(''); setNotice(''); setPage('cases');
     try { const record = await api<CaseRecord>(`/cases/${id}`); if (selectedId.current === id) setSelected(record); }
     catch (e) { setError((e as Error).message); }
   }
@@ -112,8 +121,10 @@ function App() {
     event.preventDefault(); setError(''); setSubmitting(true);
     try {
       let call;
-      if (callJson.trim()) { try { call = JSON.parse(callJson); } catch { throw new Error('Destination call must be valid JSON.'); } }
-      const record = await api<CaseRecord>('/cases', post({ sourceTx: hash.trim(), ...(destinationHash.trim() ? { destinationTx: destinationHash.trim() } : {}), ...(callJson.trim() ? { call } : {}) }));
+      if (mode === 'generic' && callJson.trim()) { try { call = JSON.parse(callJson); } catch { throw new Error('Destination call must be valid JSON.'); } }
+      if (mode === 'bridge' && sourceLogIndex && (!/^\d+$/.test(sourceLogIndex) || !Number.isSafeInteger(Number(sourceLogIndex)))) throw new Error('Source log index must be a non-negative safe integer.');
+      const bridge = mode === 'bridge' ? { id: 'attestcoin-bridge-v1', ...Object.fromEntries(Object.entries(bridgeFields).map(([k, v]) => [k, v.trim()])), ...(sourceLogIndex ? { sourceLogIndex: Number(sourceLogIndex) } : {}) } : undefined;
+      const record = await api<CaseRecord>('/cases', post({ ...(bridge ? { bridge } : {}), sourceTx: hash.trim(), ...(destinationHash.trim() ? { destinationTx: destinationHash.trim() } : {}), ...(mode === 'generic' && callJson.trim() ? { call } : {}) }));
       selectedId.current = record.id; setSelected(record); setAttemptIndex(-1); setPage('cases');
       setCases(await api<CaseRecord[]>('/cases'));
     } catch (e) { setError((e as Error).message); }
@@ -138,6 +149,16 @@ function App() {
   function newCase() {
     setPage('overview'); selectedId.current = null; setSelected(null); setNotice('');
     setTimeout(() => hashInput.current?.focus(), 0);
+  }
+
+  function reuseBridge(index?: number) {
+    if (!selected?.input.bridge) return;
+    const b = selected.input.bridge;
+    setHash(selected.input.sourceTx); setDestinationHash(selected.input.destinationTx ?? '');
+    setMode('bridge'); setCallJson('');
+    setBridgeFields({ sourceEmitter: b.sourceEmitter, minter: b.minter, expectedWrappedToken: b.expectedWrappedToken, caller: b.caller });
+    setSourceLogIndex(String(index ?? b.sourceLogIndex ?? ''));
+    newCase(); setNotice('Inputs copied. Submit to save a new case; previous evidence stays in its original case.');
   }
 
   async function copyCommand() {
@@ -172,7 +193,7 @@ function App() {
     <div className="workspace">
       <header className="topbar"><div className="breadcrumbs">Workspace <span>/</span> <strong>{page === 'overview' ? 'Overview' : page === 'network' ? 'Network setup' : selected ? 'Case inspector' : 'Cases'}</strong></div><div className="topbar-right"><span className="network-pill"><span className="network-symbol">◇</span>{config?.networkLabel ?? 'Loading configuration'}</span><span className="local-pill"><span className="live-dot" />Local</span></div></header>
       <main id="main">
-        {error && <div className="alert-message" role="alert"><Icon name="alert" /><span>{error}</span><button onClick={() => setError('')} aria-label="Dismiss error">×</button></div>}
+        {error && <div id="request-error" className="alert-message" role="alert" tabIndex={-1}><Icon name="alert" /><span>{error}</span><button onClick={() => setError('')} aria-label="Dismiss error">×</button></div>}
         {notice && <div className="notice-message" role="status">{notice}<button onClick={() => setNotice('')} aria-label="Dismiss notification">×</button></div>}
         {page === 'overview' && <>
           <div className="page-heading"><div><span className="eyebrow">YOUR CROSS-CHAIN WORKBENCH</span><h1>Follow the proof.</h1><p>Find where a workflow stops. Understand what the evidence says.</p></div><span className="heading-mark" aria-hidden="true"><Icon name="trace" size={46} /></span></div>
@@ -181,8 +202,13 @@ function App() {
           <div className="inspection-grid">
             <section className="panel inspector-form"><div className="panel-heading"><div><span className="section-number">01 / INSPECT</span><h2>Start with a transaction</h2></div><Icon name="search" size={21} /></div>
               <form onSubmit={inspect}>
+                <label htmlFor="inspection-mode">Inspection type</label><select id="inspection-mode" value={mode} onChange={e => setMode(e.target.value)}><option value="generic">Generic transaction</option><option value="bridge">Attestcoin bridge</option></select>
                 <label htmlFor="source-hash">Source transaction hash</label><div className="hash-input-wrap"><span>0x</span><input ref={hashInput} id="source-hash" value={hash} onChange={e => setHash(e.target.value)} placeholder="Paste the full transaction hash" autoComplete="off" spellCheck={false} required pattern="0x[0-9a-fA-F]{64}" aria-describedby="hash-help" /></div><p className="field-hint" id="hash-help">A mined transaction on your configured source network.</p>
-                <details className="advanced"><summary>Destination evidence <span>Optional</span></summary><label htmlFor="destination-hash">Destination transaction hash</label><input id="destination-hash" value={destinationHash} onChange={e => setDestinationHash(e.target.value)} placeholder="0x…" autoComplete="off" spellCheck={false} pattern="0x[0-9a-fA-F]{64}" /><label htmlFor="call-json">Intended destination call · JSON</label><textarea id="call-json" value={callJson} onChange={e => setCallJson(e.target.value)} placeholder={'{ "to": "…", "from": "…", "data": "0x…" }'} rows={4} spellCheck={false} /><p className="field-hint">Include exact call inputs and optionally an ABI to decode contract errors. No private key.</p></details>
+                {mode === 'bridge' && <fieldset className="bridge-fields"><legend>Bridge context</legend><p className="field-hint">Use your deployed contracts from the pinned official bridge example on Sepolia and Creditcoin testnet. ProofOps derives the recipient, amount, and execution call from verified evidence.</p>
+                  {([['sourceEmitter', 'Source token emitter'], ['minter', 'Destination minter'], ['expectedWrappedToken', 'Expected wrapped token'], ['caller', 'Simulation caller']] as const).map(([key, label]) => <React.Fragment key={key}><label htmlFor={`bridge-${key}`}>{label}</label><input id={`bridge-${key}`} required value={bridgeFields[key]} onChange={e => setBridgeFields({ ...bridgeFields, [key]: e.target.value })} pattern="0x[0-9a-fA-F]{40}" placeholder="0x…" autoComplete="off" spellCheck={false} /></React.Fragment>)}
+                  <label htmlFor="source-log-index">Source global log index (optional)</label><input id="source-log-index" value={sourceLogIndex} onChange={e => setSourceLogIndex(e.target.value)} inputMode="numeric" pattern="[0-9]+" aria-describedby="log-help" /><p className="field-hint" id="log-help">Leave empty to discover burns. If several match, confirm the first event after inspection.</p>
+                </fieldset>}
+                <details className="advanced"><summary>Destination evidence <span>Optional</span></summary><label htmlFor="destination-hash">Destination transaction hash</label><input id="destination-hash" value={destinationHash} onChange={e => setDestinationHash(e.target.value)} placeholder="0x…" autoComplete="off" spellCheck={false} pattern="0x[0-9a-fA-F]{64}" />{mode === 'generic' ? <><label htmlFor="call-json">Intended destination call · JSON</label><textarea id="call-json" value={callJson} onChange={e => setCallJson(e.target.value)} placeholder={'{ "to": "…", "from": "…", "data": "0x…" }'} rows={4} spellCheck={false} /><p className="field-hint">Include exact call inputs and optionally an ABI to decode contract errors. No private key.</p></> : <p className="field-hint">Attach a submitted transaction to check its mint evidence. The simulation call is derived automatically.</p>}</details>
                 <button className="primary-button inspect-button" disabled={submitting || loading} type="submit">{submitting ? 'Starting inspection…' : 'Inspect transaction'}<Icon name={submitting ? 'clock' : 'arrow'} size={18} /></button><div className="form-footnote"><Icon name="shield" size={13} />Read-only checks. No wallet connection needed.</div>
               </form>
             </section>
@@ -204,7 +230,8 @@ function App() {
           <button className="text-button back-button" onClick={() => { setSelected(null); selectedId.current = null; }}>← All cases</button>
           <div className="page-heading case-heading"><div><span className="eyebrow">CASE / {selected.id.slice(0, 8)}</span><h1>Transaction inspector.</h1><p className="full-hash">{selected.input.sourceTx}</p></div><div className="case-actions"><a className="secondary-button" href={`/api/cases/${selected.id}/export`} download><Icon name="download" />Export evidence</a><button className="primary-button" disabled={submitting || latest?.status === 'running'} onClick={() => void rerun()}><Icon name="refresh" />{latest?.status === 'running' ? 'Inspecting…' : 'Rerun checks'}</button></div></div>
           <div className="case-status-bar"><Badge status={attempt?.status ?? 'incomplete'} /><span>{attempt ? time(attempt.startedAt) : 'Awaiting first attempt'}</span><label htmlFor="attempt-select">Attempt</label><select id="attempt-select" value={attemptIndex} onChange={e => setAttemptIndex(Number(e.target.value))}><option value={-1}>Latest ({selected.attempts.length})</option>{selected.attempts.slice(0, -1).map((a, i) => <option value={i} key={a.id}>{i + 1} · {time(a.startedAt)}</option>)}</select></div>
-          <div className="case-layout"><section className="panel evidence-panel"><div className="panel-heading"><div><h2>Evidence timeline</h2><p>Observations and simulations are labeled separately.</p></div><Icon name="trace" /></div>{attempt?.observations.length ? <div className="observations">{attempt.observations.map((o, i) => <ObservationCard key={`${attempt.id}-${i}`} observation={o} />)}</div> : <div className="empty-state"><Icon name="clock" size={28} /><h3>Collecting evidence</h3><p>Checks appear here as they complete.</p></div>}{attempt?.status === 'running' && <div className="progress-note" role="status"><span className="pulse-dot" />Inspection in progress. This view refreshes automatically.</div>}{attempt?.status === 'interrupted' && <div className="progress-note">This attempt was interrupted. Rerun to collect fresh evidence.</div>}</section><aside className="panel checkpoint-panel"><span className="section-number">CHECKPOINTS</span>{stages.map(s => { const o = attempt?.observations.filter(o => o.stage === s.key).at(-1); return <div className={`checkpoint checkpoint-${o?.outcome ?? 'unknown'}`} key={s.key}><span className="checkpoint-dot"><Icon name={o?.outcome === 'pass' ? 'check' : o?.outcome === 'fail' || o?.outcome === 'unavailable' ? 'alert' : 'clock'} size={13} /></span><div>{s.label}<small>{o ? o.outcome === 'pass' ? 'Evidence collected' : o.outcome === 'wait' ? 'Waiting' : o.outcome === 'unknown' ? 'Not supplied' : 'Needs attention' : 'Not evaluated'}</small></div></div>; })}<div className="checkpoint-note"><Icon name="shield" size={17} /><p>A verified proof does not imply completed application execution.</p></div></aside></div>
+          {selected.input.bridge && <BridgeDetails record={selected} attempt={attempt} onReuse={reuseBridge} />}
+          <div className="case-layout"><section className="panel evidence-panel"><div className="panel-heading"><div><h2>Evidence timeline</h2><p>Observations and simulations are labeled separately.</p></div><Icon name="trace" /></div>{attempt?.observations.length ? <div className="observations">{attempt.observations.map((o, i) => <ObservationCard key={`${attempt.id}-${i}`} observation={o} />)}</div> : <div className="empty-state"><Icon name="clock" size={28} /><h3>Collecting evidence</h3><p>Checks appear here as they complete.</p></div>}{attempt?.status === 'running' && <div className="progress-note" role="status"><span className="pulse-dot" />Inspection in progress. This view refreshes automatically.</div>}{attempt?.status === 'interrupted' && <div className="progress-note">This attempt was interrupted. Rerun to collect fresh evidence.</div>}</section><aside className="panel checkpoint-panel"><span className="section-number">CHECKPOINTS</span>{stages.map(s => { const group = attempt?.observations.filter(o => o.stage === s.key) ?? []; const o = group.find(o => o.outcome === 'fail') ?? group.find(o => o.outcome === 'unavailable') ?? group.at(-1); return <div className={`checkpoint checkpoint-${o?.outcome ?? 'unknown'}`} key={s.key}><span className="checkpoint-dot"><Icon name={o?.outcome === 'pass' ? 'check' : o?.outcome === 'fail' || o?.outcome === 'unavailable' ? 'alert' : 'clock'} size={13} /></span><div>{s.label}<small>{o ? o.outcome === 'pass' ? 'Evidence collected' : o.outcome === 'wait' ? 'Waiting' : o.outcome === 'unknown' ? 'Not established' : 'Needs attention' : 'Not evaluated'}</small></div></div>; })}<div className="checkpoint-note"><Icon name="shield" size={17} /><p>A verified proof does not imply completed application execution.</p></div></aside></div>
         </>}
         <footer className="footer"><span><span className="footer-dot" />ProofOps · Developer preview</span><span>Local evidence. Explicit conclusions.</span></footer>
       </main>

@@ -2,7 +2,8 @@
 
 Issue #6 implements the built-in adapter in `src/bridge/`. Bridge context is
 accepted by the existing local case API and preserved by v2 bundle import/export.
-Dedicated CLI options and dashboard controls are the next issue, #7. A live
+Dedicated CLI options and dashboard controls are implemented in #7; see
+[the bridge workflow](../bridge-workflow.md). A live
 Creditcoin bridge demonstration still requires phase-3 deployments and funding.
 
 ## Resolving deployment identity

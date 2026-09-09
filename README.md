@@ -31,6 +31,11 @@ node dist/cli.js export <case-id> --out ./case.json
 node dist/cli.js check <case-bundle.json>
 ```
 
+`inspect --bridge ./bridge.json` accepts the pinned bridge context and derives its
+execution call from verified evidence. The dashboard offers the same workflow
+under **Inspection type → Attestcoin bridge**. See [the bridge workflow](docs/bridge-workflow.md)
+for event confirmation, destination receipts, and CLI examples.
+
 `inspect` also accepts `--call ./call.json`. The optional file contains `to`, `from`,
 `data`, optional decimal-string `value`, and optional JSON-array `abi`. These are
 the exact intended destination call inputs, including proof arguments if needed.
@@ -83,15 +88,14 @@ simulation/receipt, and JSON evidence bundles with current-state checks. The bri
 backend decodes burns, verifies runtime identity, diagnoses mapping/role/replay
 state, constructs exact calls, and correlates destination mint evidence.
 
-Remaining milestones: bridge CLI/dashboard controls, a funded live bridge
-demonstration, automatic application-specific regression generation, worker instrumentation,
+Remaining milestones: a funded live bridge demonstration, automatic application-specific regression generation, worker instrumentation,
 and historical replay only where the runtime and provider capabilities permit it.
 
 See [architecture](docs/architecture.md) and [acceptance criteria](docs/acceptance.md).
 See the pinned [bridge adapter specification](docs/adapters/bridge-v1.md),
 [implementation and build notes](docs/adapters/bridge-v1-build.md), and
-[acceptance matrix](docs/adapters/bridge-v1-acceptance.md). Bridge inputs currently
-use the local case API or v2 bundles; dedicated interface controls are next in #7.
+[acceptance matrix](docs/adapters/bridge-v1-acceptance.md). Bridge inputs are available through the CLI, dashboard, local case API, and v2
+bundles. Changed inputs create a new case; reruns preserve inputs and append evidence.
 
 ## Upstream references
 
