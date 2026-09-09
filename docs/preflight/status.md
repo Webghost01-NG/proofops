@@ -1,11 +1,16 @@
 # Phase-3 bridge preflight — 2026-09-09
 
-All three contracts are deployed. Their runtime code matches the pinned profile,
-and Creditcoin configuration checks pass. **Issue #8 awaits the source deployment's
-finalized-block check; #9 remains blocked until #8 closes.** The last inspected
-Sepolia finalized block was 11666687, before source deployment block 11666696.
-That earlier block correctly contains no source-token code; it is a finality wait,
-not a mismatch in the contract that was deployed.
+**The deployment preflight passes.** All three successful receipts are canonical
+and included in finalized blocks. Their runtime identities, wallet/token balances,
+verifier, ownership, mint role, and initial empty emitter mapping are verified.
+[Finalized read-only report](finalized-deployment-check.json) and
+[separate signer/funding review](readiness-review.json) complete #8's checks.
+
+The standalone checker deliberately retains exit 2 because it cannot certify
+external signing or fee review. The separate review resolves those two remaining
+items using the user-approved deployment receipts and actual gas estimates.
+The source finalized block is 11666718; Creditcoin finalized block is 5456789.
+No burn, registration or bridge execution has been performed.
 
 ## Actual deployments
 
@@ -35,8 +40,9 @@ intentionally unset for the phase-3 rejection demonstration.
 
 The wallet was funded with 10,000 testnet CTC before its Creditcoin deployments.
 The finalized balance after both deployments was 9999.9988952485 CTC. The source
-wallet had 0.100587121015810964 Sepolia ETH before deployment; final post-deployment
-balance and source token checks remain part of the outstanding finalized report.
+wallet has 0.099994571157877694 Sepolia ETH after deployment and 1,000,000 TEST
+at finalized block 11666718. Both balances cover the planned 1 TEST burn and its
+reviewed gas ceiling.
 
 Actual creation estimates were 591856 gas for the source, 1449076 for the minter,
 and 857034 for the wrapped token. Reviewed limits added 20% gas headroom and used

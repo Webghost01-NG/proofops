@@ -1,0 +1,89 @@
+{
+  "observedAt": "2026-09-09T08:29:19.809Z",
+  "issue": 8,
+  "status": "ready-for-source-burn",
+  "scope": "Deployment/signer/funding/configuration preflight only; no bridge burn or mint completed.",
+  "profileRevision": "6668487ad07fdf8119f54aab9db99b6c50155b5c",
+  "publicContext": "project-bridge.json",
+  "readOnlyReport": "finalized-deployment-check.json",
+  "readOnlyReportExitCode": 2,
+  "externalReview": {
+    "signer": "User approved the three contract creations in the separate MetaMask wallet; successful canonical receipts have the selected wallet as sender. No private key or password entered ProofOps.",
+    "deployments": [
+      {
+        "role": "source",
+        "hash": "0x03c2c0ce68ff07027c2526863a55baacca761cb3bbd31a63d43233b6c2f6f6be",
+        "address": "0x809d323140d05024fc06e8c38f8bfad3bd423203",
+        "receiptBlock": 11666696,
+        "canonical": true,
+        "finalizedAt": {
+          "number": 11666718,
+          "hash": "0x9ec3f5f9cc41e2802138d0e4c8423f0a9a88d890a42c75d838711d2148ee1f30"
+        }
+      },
+      {
+        "role": "minter",
+        "hash": "0x127c5e19656c35b738963605b5f5b8b2356322da23df5f938d346a2accccc3b7",
+        "address": "0x8cd2da9e45d18c47a803f065a3625ae68bf37b17",
+        "receiptBlock": 5456737,
+        "canonical": true,
+        "finalizedAt": {
+          "number": 5456789,
+          "hash": "0xb1d242b57d8bb0272489ee0f2fa953329dd21bc7da812ee7edaf327ef80a42b3"
+        }
+      },
+      {
+        "role": "wrapped",
+        "hash": "0x6c660ae56155cc5399f359f311d8ee53c95abc217721db5bf1ebf3141f3b5076",
+        "address": "0x0908e0409d593409d251306302fdca0c45198b9c",
+        "receiptBlock": 5456760,
+        "canonical": true,
+        "finalizedAt": {
+          "number": 5456789,
+          "hash": "0xb1d242b57d8bb0272489ee0f2fa953329dd21bc7da812ee7edaf327ef80a42b3"
+        }
+      }
+    ],
+    "funding": [
+      {
+        "action": "source burn",
+        "estimatedGas": "52993",
+        "reviewedFeeCeilingWei": "138665768473904",
+        "finalizedBalanceWei": "99994571157877694",
+        "balanceBlock": {
+          "number": 11666718,
+          "hash": "0x9ec3f5f9cc41e2802138d0e4c8423f0a9a88d890a42c75d838711d2148ee1f30"
+        }
+      },
+      {
+        "action": "emitter registration",
+        "estimatedGas": "150682",
+        "reviewedFeeCeilingWei": "180819000000000",
+        "finalizedBalanceWei": "9999998895248500000000",
+        "balanceBlock": {
+          "number": 5456789,
+          "hash": "0xb1d242b57d8bb0272489ee0f2fa953329dd21bc7da812ee7edaf327ef80a42b3"
+        }
+      }
+    ],
+    "sourceRawTokenBalance": "1000000000000000000000000",
+    "plannedRawBurn": "1000000000000000000"
+  },
+  "deferredToLaterTransactionReview": [
+    "Re-estimate burn/registration immediately before each approved write.",
+    "Estimate exact execute gas after its actual source proof exists, before #11 broadcast.",
+    "Retain empty emitter mapping until #10 rejection evidence exists."
+  ],
+  "checks": {
+    "threeRuntimeIdentities": true,
+    "canonicalFinalizedReceipts": true,
+    "verifierFD2": true,
+    "emptyEmitterMapping": true,
+    "selectedOwner": true,
+    "minterRole": true,
+    "sourceTokens": true,
+    "knownActionFunding": true,
+    "servicesReady": true
+  },
+  "serviceEvidence": "post-deployment-services.json"
+}
