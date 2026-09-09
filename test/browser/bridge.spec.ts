@@ -1,0 +1,76 @@
+import { test, expect } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+import { input, hash } from '../bridge-fixtures.js';
+import { interfaceRecord } from '../bridge-interface-fixtures.js';
+
+// Synthetic inputs exercise the real local API with source configuration missing.
+test('bridge form validates context and preserves saved inputs, reruns, and v2 export', async ({ page }, testInfo) => {
+  const errors: string[] = [];
+  page.on('pageerror', e => errors.push(e.message));
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  await page.goto('/');
+  await page.getByLabel('Inspection type').selectOption('bridge');
+  await page.getByLabel('Source transaction hash', { exact: true }).fill(hash);
+  for (const [label, value] of [['Source token emitter', input.sourceEmitter], ['Destination minter', input.minter], ['Expected wrapped token', input.expectedWrappedToken], ['Simulation caller', input.caller]]) await page.getByLabel(label, { exact: true }).fill(value);
+  await page.getByLabel('Source global log index (optional)').fill('9007199254740992');
+  await page.getByRole('button', { name: 'Inspect transaction', exact: true }).click();
+  await expect(page.getByRole('alert')).toHaveText(/Source log index must be a non-negative safe integer/);
+  await expect(page.getByRole('alert')).toBeFocused();
+  await page.getByRole('button', { name: 'Dismiss error' }).click();
+  await page.getByLabel('Source global log index (optional)').fill('12');
+  await page.screenshot({ path: testInfo.outputPath('bridge-form.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Inspect transaction', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading', { name: 'Bridge inspection', exact: true })).toBeVisible();
+  await expect(page.getByText('Not confirmed', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source RPC is not configured' })).toBeVisible();
+  await page.getByRole('button', { name: 'Rerun checks', exact: true }).click();
+  await expect(page.getByRole('option', { name: 'Latest (2)' })).toBeAttached();
+  const downloaded = page.waitForEvent('download');
+  await page.getByRole('link', { name: 'Export evidence' }).click();
+  const download = await downloaded;
+  const bundle = JSON.parse(await readFile((await download.path())!, 'utf8'));
+  expect(bundle.format).toBe('proofops.case.v2');
+  expect(bundle.record.input.bridge).toEqual({ ...input, sourceLogIndex: 12 });
+  expect(bundle.record.attempts).toHaveLength(2);
+  await page.reload();
+  await page.getByRole('button', { name: /^Cases/ }).click();
+  await page.getByRole('button', { name: `Open case ${bundle.record.id}` }).click();
+  await expect(page.getByRole('heading', { name: 'Bridge inspection', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Use inputs in new inspection', exact: true }).click();
+  await expect(page.getByLabel('Source global log index (optional)')).toHaveValue('12');
+  await expect(page.getByLabel('Destination minter', { exact: true })).toHaveValue(input.minter);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+// Explicit UI fixtures only: these routes never replace the production network adapter.
+test('synthetic bridge evidence renders first-event confirmation and separates replay from historical mint', async ({ page }, testInfo) => {
+  const errors: string[] = [];
+  page.on('pageerror', e => errors.push(e.message));
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  let record = interfaceRecord();
+  await page.route('**/api/cases', route => route.fulfill({ json: [record] }));
+  await page.route(`**/api/cases/${record.id}`, route => route.fulfill({ json: record }));
+  await page.goto('/');
+  await page.getByRole('button', { name: `Open case ${record.id}` }).click();
+  await expect(page.getByText('Global log 12', { exact: true })).toBeVisible();
+  await expect(page.getByText('Global log 13', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Use first burn in new inspection' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('Source global log index (optional)')).toHaveValue('12');
+  await expect(page.getByLabel('Source token emitter', { exact: true })).toHaveValue(input.sourceEmitter);
+  record = interfaceRecord('mint');
+  await page.getByRole('button', { name: /^Cases/ }).click();
+  await page.getByRole('button', { name: `Open case ${record.id}` }).click();
+  await expect(page.getByText('Replay guard rejects this query', { exact: true })).toBeVisible();
+  await expect(page.getByText('Confirmed in finalized receipt', { exact: true })).toBeVisible();
+  await expect(page.getByText('Raw amount (base units)', { exact: true })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath('bridge-replay.png'), fullPage: true });
+  await page.getByLabel('Attempt', { exact: true }).selectOption('0');
+  await expect(page.getByText('Simulation passed; no transaction sent', { exact: true })).toBeVisible();
+  await expect(page.getByText('Confirmed in finalized receipt', { exact: true })).toBeVisible();
+  await expect(page.locator('.block-reference').filter({ hasText: 'Observation block 100' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(errors).toEqual([]);
+});

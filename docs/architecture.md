@@ -16,6 +16,7 @@ finance tracker in the parent directory. Work uses focused feature branches.
 - `src/store.ts`: append attempts and preserve evidence in SQLite.
 - `src/server.ts`: loopback-only API and built dashboard assets.
 - `src/cli.ts`: same engine and store, usable without the dashboard.
+- `src/evidence-view.ts`: shared presentation of bridge outcomes, candidates, and blocks; no RPC access.
 - `web/`: accessible case list, inspector, evidence view and readiness checks.
 
 The application reads chain state, calls the proof service, and uses `eth_call`.
@@ -27,8 +28,9 @@ its observation block and distinguished from a mined destination transaction.
 ## Case lifecycle
 
 A case has a source hash and optional destination call/transaction references or
-versioned bridge context. Bridge context is available through the local API and
-v2 bundles; dedicated CLI/dashboard controls are tracked in issue #7.
+versioned bridge context. Bridge context is available through the CLI, dashboard,
+local API, and v2 bundles. Changing inputs creates a new case; reruns append to
+the original case with its saved inputs unchanged.
 Every run creates an append-only attempt with ordered observations. Attempts end
 as `ready`, `waiting`, `blocked`, `failed`, or `incomplete`. A running attempt found
 after a restart is displayed as interrupted; an explicit rerun creates a new attempt.

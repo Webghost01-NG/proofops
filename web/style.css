@@ -86,6 +86,7 @@ code,pre,.full-hash,.case-link {
 }
 
 .skip-link {
+  clip-path:inset(50%);
   position:fixed;
   top:-100px;
   left:20px;
@@ -95,6 +96,7 @@ code,pre,.full-hash,.case-link {
 }
 
 .skip-link:focus {
+  clip-path:none;
   top:12px;
 }
 
@@ -2126,3 +2128,46 @@ tbody tr:last-child td {
     transition:none!important;
   }
 }
+
+/* Bridge context and evidence retain full addresses at narrow widths. */
+.inspector-form select {
+  width: 100%;
+  padding: 11px;
+  margin-bottom: 18px;
+  border: 1px solid #ccd3db;
+  border-radius: 6px;
+  background: #fff;
+  color: #253347;
+}
+.bridge-fields {
+  min-width: 0;
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px solid #dce1e7;
+  border-radius: 8px;
+}
+.bridge-fields legend { font-weight: 600; padding: 0 6px; }
+.bridge-details { margin-bottom: 24px; }
+.bridge-results { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 20px 24px; }
+.bridge-result { padding: 16px; border: 1px solid #dce1e7; border-radius: 8px; background: #f8fafc; }
+.bridge-result h3 { font-size: 12px; color: #435269; margin: 0 0 8px; }
+.bridge-result p { font-size: 13px; line-height: 1.5; margin: 0; }
+.result-pass { border-left: 3px solid #238066; }
+.result-fail { border-left: 3px solid #b9513b; }
+.bridge-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 0 24px 20px; margin: 0; }
+.bridge-facts dt { color: #617087; font-size: 12px; margin-bottom: 5px; }
+.bridge-facts dd { margin: 0; font-family: monospace; font-size: 12px; overflow-wrap: anywhere; }
+.burn-selection, .bridge-reuse { padding: 18px 24px; border-top: 1px solid #e3e7ec; }
+.burn-selection h3 { font-size: 14px; margin: 0; }
+.burn-selection p, .bridge-reuse p { font-size: 12px; line-height: 1.6; color: #617087; }
+.burn-selection ol { padding-left: 20px; font-size: 12px; }
+.burn-selection li { margin: 14px 0; line-height: 1.7; }
+.burn-selection code, .block-reference code { display: block; overflow-wrap: anywhere; font-size: 11px; }
+.observation .block-reference { padding: 8px 10px; background: #f5f7fa; border-radius: 5px; font-size: 11px; }
+.observation-title { flex-wrap: wrap; }
+.bridge-details button { white-space: normal; text-align: left; }
+@media (max-width: 640px) {
+  .bridge-results, .bridge-facts { grid-template-columns: 1fr; padding-left: 18px; padding-right: 18px; }
+  .burn-selection, .bridge-reuse { padding: 18px; }
+}
+.bridge-fields input { width: 100%; margin-bottom: 14px; font-family: monospace; }

@@ -4,7 +4,8 @@ Delivery specification for [issue #5](https://github.com/Webghost01-NG/proofops/
 The adapter itself is implemented in #6 and exposed in the interfaces in #7.
 The backend is now implemented under #6. The build identity and compatibility
 decisions are recorded in [the implementation notes](bridge-v1-build.md).
-Dedicated CLI and dashboard inputs remain in #7.
+Dedicated CLI and dashboard inputs are implemented in #7; see
+[the bridge workflow](../bridge-workflow.md).
 
 ## Pinned reference and supported boundary
 

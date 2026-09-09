@@ -129,6 +129,9 @@ test('registration, wrong mapping, missing role, replay and raw errors keep dist
   assert.ok(codes(diagnoseBridge(input, empty, { block, revert: error('No wrapped token for emitter') })).includes('BRIDGE_EMITTER_UNREGISTERED'));
   assert.ok(codes(diagnoseBridge(input, { ...snapshot(), wrappedToken: recipient })).includes('BRIDGE_WRAPPED_TOKEN_MISMATCH'));
   assert.ok(codes(diagnoseBridge(input, { ...snapshot(), minterRole: false })).includes('BRIDGE_MINTER_ROLE_MISSING'));
+  const separateOwner = diagnoseBridge(input, { ...snapshot(), targetOwner: recipient });
+  assert.ok(!separateOwner.some(f => f.outcome === 'fail'), 'permissionless execution does not require the target owner to equal its caller');
+  assert.equal((separateOwner[0].evidence?.snapshot as { targetOwner: string }).targetOwner, recipient);
   const replay = diagnoseBridge(input, { ...empty, processed: true }, { block, revert: error('Query already processed') });
   assert.ok(codes(replay).includes('BRIDGE_QUERY_PROCESSED'));
   assert.ok(!codes(replay).includes('BRIDGE_EMITTER_UNREGISTERED'));
@@ -151,6 +154,10 @@ test('mint correlation accepts a different relayer only with exact source and bo
     (d: ReturnType<typeof destination>) => { d.snapshot!.identities[0].verified = false; },
     (d: ReturnType<typeof destination>) => { d.logs[1].address = recipient; },
     (d: ReturnType<typeof destination>) => { d.logs[1].topics[3] = hash; },
+    (d: ReturnType<typeof destination>) => { d.logs[1].topics[2] = '0x' + '00'.repeat(12) + input.caller.slice(2); },
+    (d: ReturnType<typeof destination>) => { d.data = '0x'; },
+    (d: ReturnType<typeof destination>) => { d.snapshot!.wrappedToken = recipient; },
+    (d: ReturnType<typeof destination>) => { d.snapshot!.verifier = recipient; },
     (d: ReturnType<typeof destination>) => { d.logs[1].data = toBeHex(101, 32); },
     (d: ReturnType<typeof destination>) => { d.logs[1].topics[1] = '0x' + '00'.repeat(12) + recipient.slice(2); },
     (d: ReturnType<typeof destination>) => { d.logs[0].address = recipient; },
