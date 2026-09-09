@@ -172,3 +172,41 @@ No keystore import, private key, password, or seed phrase is needed.
 
 Record each actual receipt and check runtime identity before advancing to the
 next deployment. Leave the emitter mapping empty as described above.
+
+## Actual deployment records and Creditcoin receipt handling
+
+[Public deployment context](project-bridge.json) contains the three actual deployed
+addresses and selected simulation caller. [Source](source-deployment.json),
+[minter](minter-deployment.json), and [wrapped-token](wrapped-deployment.json)
+records preserve their real receipts and runtime checks.
+
+The source and minter were deployed with `forge create --broadcast --browser`.
+After minter submission, Foundry's Alloy block watcher failed to parse Creditcoin
+blocks because their responses omit `mixHash`. Direct `eth_getTransactionReceipt`,
+`eth_getTransactionByHash`, `eth_getCode` and canonical-block reads verified that
+the deployment succeeded. Do not redeploy merely because receipt watching fails.
+Do not fabricate `mixHash` or other block fields to make a client accept a response.
+
+For the wrapped token, the same pinned creation bytecode and ABI-encoded minter
+constructor argument were submitted with `cast send --async --browser --create`.
+`--async` prints the submitted hash and avoids the incompatible block watcher;
+it does not prove mining success. The actual receipt was then checked directly.
+The equivalent command, run in the pinned upstream checkout with the public
+variables above, is:
+
+```sh
+cast send --async --browser --browser-disable-open --from "$PROOFOPS_DEMO_ADDRESS" --rpc-url "$PROOFOPS_CREDITCOIN_RPC" --chain 102031 --gas-limit 1028441 --gas-price 1000000000 --priority-gas-price 0 --nonce 1 --create "$(forge inspect --root bridge contracts/sol/BridgeTestToken.sol:BridgeTestToken bytecode)" 'constructor(address)' "$PROOFOPS_MINTER"
+```
+
+This records the already submitted transaction. Its nonce and fee limits are
+historical observations, not instructions to submit a duplicate. Future writes
+need fresh nonce, gas, network and wallet checks and their own MetaMask approval.
+[Wrapped deployment estimate](wrapped-deployment-estimate.json) records the
+observed fee ceiling; [scenario estimates](scenario-gas-estimates.json) cover the
+planned 1 TEST burn and later emitter registration without submitting either.
+
+MetaMask keeps network selection per site. If Foundry reports the wrong chain,
+switch the network for `http://127.0.0.1:9545` itself before confirming the
+connection. A temporary loopback helper using `eth_requestAccounts`,
+`wallet_switchEthereumChain` and (when absent) `wallet_addEthereumChain` resolved
+this during setup. No key export or message signature was required.

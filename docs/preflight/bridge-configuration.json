@@ -1,0 +1,13 @@
+{
+  "observedAt": "2026-09-09T08:22:28.466Z",
+  "chainId": 102031,
+  "block": {
+    "number": 5456767,
+    "hash": "0xf42bd294be6576406b648a880b31090b8fdbade51937f9d44519c2378aee6a5e"
+  },
+  "verifier": "0x0000000000000000000000000000000000000FD2",
+  "mapping": "0x0000000000000000000000000000000000000000",
+  "owner": "0x6CeD8D6Bad8Dfd2e60BCEA116fE74548f959f1F2",
+  "minterRole": true,
+  "allExpected": true
+}

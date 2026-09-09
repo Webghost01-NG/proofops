@@ -1,0 +1,40 @@
+{
+  "observedAt": "2026-09-09T08:21:56.267Z",
+  "wallet": "0x6CeD8D6Bad8Dfd2e60BCEA116fE74548f959f1F2",
+  "plannedRawBurn": "1000000000000000000",
+  "observations": [
+    {
+      "name": "source burn",
+      "chainId": 11155111,
+      "to": "0x809d323140d05024fC06E8C38F8bfAD3Bd423203",
+      "data": "0x42966c680000000000000000000000000000000000000000000000000de0b6b3a7640000",
+      "estimatedGas": "52993",
+      "gasLimit": "63592",
+      "maxFeePerGasWei": "2180553662",
+      "feeCeilingWei": "138665768473904",
+      "balanceWei": "100587121015810964",
+      "balanceBlock": {
+        "number": 11666687,
+        "hash": "0xb4469c7449961e0dc8299a1e36e713ae6a5d02155cd95826abdce339facdd7c2"
+      },
+      "estimateBlockTag": "latest implicit; estimate is state-dependent"
+    },
+    {
+      "name": "emitter registration",
+      "chainId": 102031,
+      "to": "0x8cd2da9e45d18c47a803f065a3625ae68bf37b17",
+      "data": "0x286125b9000000000000000000000000809d323140d05024fc06e8c38f8bfad3bd4232030000000000000000000000000908e0409d593409d251306302fdca0c45198b9c",
+      "estimatedGas": "150682",
+      "gasLimit": "180819",
+      "maxFeePerGasWei": "1000000000",
+      "feeCeilingWei": "180819000000000",
+      "balanceWei": "9999998895248500000000",
+      "balanceBlock": {
+        "number": 5456766,
+        "hash": "0xbd90472bda72c685920f547fb9ee975dbe3699328a245cdf567b599f65995914"
+      },
+      "estimateBlockTag": "latest implicit; estimate is state-dependent"
+    }
+  ],
+  "remaining": "Actual execute gas must be estimated when the source burn proof exists, before its transaction. No burn or registration sent."
+}
