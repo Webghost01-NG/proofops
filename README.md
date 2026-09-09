@@ -4,7 +4,7 @@ Local, read-only diagnostics for Attestcoin workflows. Inspect a Sepolia transac
 check attestation readiness, request and verify its proof, and simulate a destination
 call with evidence attached to each finding. Cases survive a process restart.
 
-This is the first implementation milestone, not a deployed or audited product.
+This is a local development tool, not a deployed or audited product.
 No sample transactions are presented as live activity. Inspection never signs or
 broadcasts transactions, changes contract configuration, or uses a private key.
 
@@ -79,16 +79,19 @@ evidence. Destination application execution remains a separate milestone.
 
 Included: CLI, local dashboard, SQLite persistence, network checks, source evidence,
 attestation queries, proof requests and native verification, optional destination
-simulation/receipt, bounded diagnostic rules, JSON evidence bundles and current-state checks.
+simulation/receipt, and JSON evidence bundles with current-state checks. The bridge
+backend decodes burns, verifies runtime identity, diagnoses mapping/role/replay
+state, constructs exact calls, and correlates destination mint evidence.
 
-Remaining milestones: funded live bridge/loan demonstrations, semantic application
-adapters, automatic application-specific regression generation, worker instrumentation,
+Remaining milestones: bridge CLI/dashboard controls, a funded live bridge
+demonstration, automatic application-specific regression generation, worker instrumentation,
 and historical replay only where the runtime and provider capabilities permit it.
 
 See [architecture](docs/architecture.md) and [acceptance criteria](docs/acceptance.md).
-The next implementation milestone follows the pinned
-[bridge adapter specification](docs/adapters/bridge-v1.md) and its
-[acceptance matrix](docs/adapters/bridge-v1-acceptance.md).
+See the pinned [bridge adapter specification](docs/adapters/bridge-v1.md),
+[implementation and build notes](docs/adapters/bridge-v1-build.md), and
+[acceptance matrix](docs/adapters/bridge-v1-acceptance.md). Bridge inputs currently
+use the local case API or v2 bundles; dedicated interface controls are next in #7.
 
 ## Upstream references
 

@@ -2,8 +2,9 @@
 
 Delivery specification for [issue #5](https://github.com/Webghost01-NG/proofops/issues/5).
 The adapter itself is implemented in #6 and exposed in the interfaces in #7.
-This document defines proposed application interfaces and data changes; it does
-not change the running application, its database, contracts, or configuration.
+The backend is now implemented under #6. The build identity and compatibility
+decisions are recorded in [the implementation notes](bridge-v1-build.md).
+Dedicated CLI and dashboard inputs remain in #7.
 
 ## Pinned reference and supported boundary
 
@@ -30,7 +31,7 @@ need a separate supported profile. The existing generic inspector remains useful
 for them but must not issue this adapter's bridge-completion conclusion.
 
 No tutorial address or sample receipt is automatically a verified deployment.
-Phase 3 supplies actual source token, minter, wrapped token, and linked decoder
+Phase 3 supplies actual source token, minter, and wrapped token
 identities before the funded scenario. The source test token exposes unrestricted
 test minting and transfers its "burn" to `address(1)` without reducing total
 supply; the demo must not describe this as production asset conservation.
@@ -84,11 +85,12 @@ No provider URL, file path, private key, arbitrary adapter module, or uploaded
 JavaScript is accepted through this context.
 
 Deployment identity is separate from user assertions. Before claiming supported
-bridge behavior, match the observed source token, minter, wrapped token, and linked
-decoder runtime to artifacts compiled from this pinned source. Use the manifest's
-Solidity settings and dependencies; resolve library links and immutable values
-from the actual deployment. Record artifact provenance, expected and observed
-runtime hashes, linked library addresses/hashes, and observation blocks. Check
+bridge behavior, match the observed source token, minter, and wrapped token
+runtime to artifacts compiled from this pinned source. The pinned compiler
+inlines the internal decoder; compiled library link references are empty.
+Use the manifest's Solidity settings and dependencies and verify the fixed
+native-verifier immutable values. Record artifact provenance, expected and
+observed full/executable runtime hashes, and observation blocks. Check
 source code at the source receipt's block and destination code at each relevant
 destination observation block. A caller-provided hash or a nonempty `eth_getCode`
 response alone does not establish that the source matches this example.
@@ -96,9 +98,10 @@ response alone does not establish that the source matches this example.
 Until that match exists, report `BRIDGE_IDENTITY_UNVERIFIED` (unknown), show raw
 decoded observations, and withhold authoritative correction/completion claims.
 Unsupported code must not pass based only on a matching ABI selector. The first
-implementation may consume verified build artifacts as local developer data;
-the artifact path must not be accepted from the browser. Any new local identity
-configuration surface must be reviewed before being implemented in #6/#7.
+implementation bundles verified runtime templates, with an explicit maintainer
+rebuild script. No artifact path or deployment-identity configuration surface is
+accepted from the browser. Only the exact known solc metadata trailer is excluded
+from executable matching; see the implementation notes for the verification rules.
 
 ## Source selection and binding
 
@@ -283,12 +286,12 @@ not receive arbitrary URL fetch, signer, shell, or filesystem capabilities.
 | Bundle expectations | Phase 2 keeps `proof-valid`/`destination-call-succeeds` with preserved context. | Bridge-specific replay/rejection/completion expectations belong to #12. Version alone must not imply they exist. |
 | CLI/UI | Add explicit bridge context, selection confirmation, contextual evidence and accurate status labels. | Do not add a signer or registration button; conflicting generic calldata is rejected. |
 | Dependencies/contracts | Use existing ethers/SDK; pin minimal ABI fragments with provenance when implementing. | No new runtime dependency, deployed-contract edit, or CI change is required by this design. |
-| Deployment identity setup | Produce/validate build provenance and linked runtime fingerprints for the supported profile. | Resolve the local artifact input design before coding it; no arbitrary browser filesystem access. |
+| Deployment identity setup | Bundle verified runtime fingerprints and build provenance for the supported profile. | Decoder is inlined; no new artifact input or browser filesystem access. |
 
-These are the concrete changes to review before dependent implementation. The
-existing architecture document remains the description of the shipped foundation.
-This specification does not install a schema migration, dependency, contract,
-environment variable, workflow, or deployment configuration.
+The backend changes above ship in #6; CLI/UI controls ship separately in #7.
+Bridge bundles use v2 and generic bundles retain v1, with strict validation and
+round-trip coverage. No SQLite table migration, dependency, contract, environment
+variable, workflow, or deployment configuration change is required.
 
 ## Concrete failure-to-fix scenario
 

@@ -1,7 +1,8 @@
 # Bridge v1 acceptance matrix
 
 Implementation gate for [the specification](bridge-v1.md). These are required
-test cases and live checks, **not claims that the adapter already passes**.
+test cases and live checks; the implementation evidence below identifies which
+scope has been exercised and which gates remain open.
 An unavailable prerequisite is inconclusive; it cannot satisfy a passing row.
 
 | ID | Scenario | Required result | Owner/gate |
@@ -22,7 +23,7 @@ An unavailable prerequisite is inconclusive; it cannot satisfy a passing row.
 | B14 | Native proof passes but full execute reverts, returns malformed data, or runtime is unavailable | Preserve proof observation and separate application result; only ABI true counts as application simulation success. | #6 |
 | B15 | Full execute succeeds in eth_call | Record call and finalized block; do not mark a transaction mined or change on-chain processed state. | #6 |
 | B16 | Query already processed; failed application call before successful mint | Replay takes precedence after success; reverted application execution does not consume a query. | #6; live #10/#11 |
-| B17 | Contract code is nonempty but does not match pinned linked artifacts; wrong verifier address | Unknown/unsupported identity; no authoritative bridge-completion claim. | #6; actual identity #8 |
+| B17 | Contract code is nonempty but does not match pinned artifacts; wrong verifier address | Unknown/unsupported identity; no authoritative bridge-completion claim. | #6; actual identity #8 |
 | B18 | Configuration changes between observations | Use one recorded block for snapshot/simulation; earlier receipt interpretation never borrows later state as exact historical prestate. | #6 |
 | B19 | Successful direct destination receipt with correct minter event and token mint event | Require actual input/source/query binding, emitter addresses, recipient, amount, canonicality, and finality before confirming mint. | #6; live #11 |
 | B20 | Receipt succeeds but event comes from another contract, has wrong query/token/recipient/amount, or is missing/ambiguous | No completion label; preserve mismatch/unknown evidence. | #6 |
@@ -58,3 +59,24 @@ An unavailable prerequisite is inconclusive; it cannot satisfy a passing row.
   are listed explicitly in the specification before implementation begins.
 - No bridge adapter code, runtime schema, environment, dependency, or contract
   changes are included in this documentation milestone. No live bridge mint claimed.
+
+## Backend implementation result (#6)
+
+Validated on 2026-09-09: `npm run typecheck`, `npm test` (38 passed, no skips),
+`npm run build`, and `npm run test:browser` (desktop/mobile, 2 passed).
+
+| Backend scope | Passing evidence | Remaining gate |
+|---|---|---|
+| B01–B10: inputs, binding, selection, precision, query packing | `test/bridge.test.ts` input/selection/query/call cases; existing `test/core.test.ts` source/proof mismatch and pending/failure cases. | B07 interactive candidate selection belongs to #7. |
+| B11–B18: configuration, application failure, identity, pinned blocks | Bridge diagnosis and identity unit cases; `test/bridge-network.test.ts` checks actual RPC parameters, deployed bytecode, burn, role/owner reads, and registration on disposable Anvil. | Live identity and rejection evidence remain #8/#10; local Anvil has no native verifier substitute. |
+| B19–B23: receipt correlation and finality | Unit vectors require actual-calldata binding and correct event emitters/query/token/amount, reject unsupported calls and changed blocks, and wait for nonfinal receipts. The local EVM test validates the signed destination read path. | Positive mint correlation uses isolated synthetic unit evidence. A real Creditcoin mint remains #11. |
+| B24/B28: compatibility and history | v1/v2 import/export, persisted context after reopening SQLite, and rerun cases preserve earlier mint evidence alongside current replay rejection. | CLI/UI interaction and display remain #7; reusable bridge expectations remain #12. |
+
+B25–B27 and B29 remain assigned to their original interface, live, and regression
+gates. This closes backend implementation acceptance only, not phase 2 or the live
+scenario. The existing generic live proof was also rerun successfully after the
+transport extraction; see [the validation record](../validation.md).
+
+Build inspection resolved the initial linked-decoder assumption: the decoder is
+inlined, and the minter artifact has no library links. Runtime fingerprints and
+strict v2 compatibility are documented in [the implementation notes](bridge-v1-build.md).

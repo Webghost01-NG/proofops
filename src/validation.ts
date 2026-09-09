@@ -1,5 +1,5 @@
 import { Fragment, getAddress, Interface } from 'ethers';
-import type { CallInput, CaseInput } from './types.js';
+import type { BridgeInputV1, CallInput, CaseInput } from './types.js';
 
 export class InputError extends Error {}
 
@@ -49,11 +49,30 @@ export function callInput(value: unknown): CallInput {
 
 export function caseInput(value: unknown): CaseInput {
   const raw = object(value);
-  return {
+  const result: CaseInput = {
     sourceTx: hash(raw.sourceTx),
     ...(raw.destinationTx !== undefined ? { destinationTx: hash(raw.destinationTx, 'Destination transaction hash') } : {}),
-    ...(raw.call !== undefined ? { call: callInput(raw.call) } : {})
+    ...(raw.call !== undefined ? { call: callInput(raw.call) } : {}),
+    ...(raw.bridge !== undefined ? { bridge: bridgeInput(raw.bridge) } : {})
   };
+  if (result.bridge && result.call && (result.call.to !== result.bridge.minter || result.call.from !== result.bridge.caller || BigInt(result.call.value ?? '0') !== 0n)) {
+    throw new InputError('The supplied call conflicts with the bridge minter, caller, or zero value.');
+  }
+  return result;
+}
+
+export function bridgeInput(value: unknown): BridgeInputV1 {
+  const raw = object(value);
+  if (raw.id !== 'attestcoin-bridge-v1') throw new InputError('Unsupported bridge adapter version.');
+  const allowed = ['id', 'sourceEmitter', 'minter', 'expectedWrappedToken', 'caller', 'sourceLogIndex'];
+  if (Object.keys(raw).some(key => !allowed.includes(key))) throw new InputError('Unknown bridge input field.');
+  const nonzero = (field: string) => {
+    const result = address(raw[field], field);
+    if (/^0x0{40}$/.test(result)) throw new InputError(`${field} must not be the zero address.`);
+    return result;
+  };
+  if (raw.sourceLogIndex !== undefined && (!Number.isSafeInteger(raw.sourceLogIndex) || Number(raw.sourceLogIndex) < 0)) throw new InputError('Source log index must be a non-negative safe integer.');
+  return { id: 'attestcoin-bridge-v1', sourceEmitter: nonzero('sourceEmitter'), minter: nonzero('minter'), expectedWrappedToken: nonzero('expectedWrappedToken'), caller: nonzero('caller'), ...(raw.sourceLogIndex !== undefined ? { sourceLogIndex: raw.sourceLogIndex as number } : {}) };
 }
 
 export function publicError(error: unknown): string {

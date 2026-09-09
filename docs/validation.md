@@ -1,4 +1,4 @@
-# Foundation validation
+# Validation record
 
 Observed on 2026-09-08. This records an actual read-only testnet inspection, not a
 fabricated fixture or a transaction created by ProofOps.
@@ -44,12 +44,35 @@ and transaction reference.
 
 ## Remaining work and limits
 
-- Implement an application adapter and funded bridge demonstration: emitter
-  rejection, corrected configuration, successful simulation, and actual mint.
-- Add application-specific assertions before calling arbitrary destination
-  receipts proof of an expected business outcome.
+- Expose the implemented bridge adapter through dedicated CLI/dashboard controls,
+  then run the funded bridge demonstration: emitter rejection, corrected
+  configuration, successful simulation, and actual mint.
+- The bridge profile provides application-specific assertions. Arbitrary
+  destination receipts still do not prove an expected business outcome.
 - Current-state checks depend on available RPCs, proof service, and native runtime.
   Historical replay is not implemented.
 - SQLite uses Node's experimental built-in API. The local interface lists the
   200 most recently updated cases; larger workspaces need pagination.
 - This is a local developer preview, not an audited hosted multi-user service.
+
+## Bridge backend validation (#6)
+
+On 2026-09-09, the complete suite passed 38 tests with no skips. It includes the
+original foundation checks, bridge rule vectors, a pinned-block RPC fixture, and
+actual deployments/burn/registration on disposable Anvil. The Anvil bridge test
+does not install a mock native verifier and explicitly rejects an unavailable
+native index read. Positive mint-correlation unit fixtures are synthetic and
+isolated; this is not a live bridge mint result.
+
+Type checks, the production build, and both desktop/mobile Playwright flows also
+passed. Browser checks cover the existing interface; bridge-specific controls
+and their acceptance checks remain in #7. The pinned Solidity reference rebuild
+completed successfully and its deployed executable code matched the local EVM.
+
+The existing real Sepolia evidence bundle was rerun with the updated core:
+`check` returned `pass` for `proof-valid`. The native verifier accepted it at
+2026-09-09 06:13:57 UTC, finalized Creditcoin block 5456259, hash
+`0xa498271be8140ff06d21b53ed9df0f1ce1a53d2f92bd046f71810fb33a3d4286`.
+[Fresh exported evidence](evidence/bridge-adapter-core-recheck.json) preserves
+that read-only observation. It verifies the generic proof path after the RPC
+refactor; it does not establish a source bridge burn or destination mint.
