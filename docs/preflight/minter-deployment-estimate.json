@@ -1,0 +1,11 @@
+{
+  "observedAt": "2026-09-09T08:11:41.010Z",
+  "wallet": "0x6CeD8D6Bad8Dfd2e60BCEA116fE74548f959f1F2",
+  "chainId": 102031,
+  "estimatedGas": "1449076",
+  "gasLimit": "1738892",
+  "maxFeePerGas": "1000000000",
+  "feeCeilingWei": "1738892000000000",
+  "balanceWei": "10000000000000000000000",
+  "pendingNonce": 0
+}

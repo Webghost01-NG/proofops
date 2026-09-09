@@ -1,0 +1,84 @@
+{
+  "observedAt": "2026-09-09T06:46:46.057Z",
+  "profileRevision": "6668487ad07fdf8119f54aab9db99b6c50155b5c",
+  "context": {
+    "sourceEmitter": "0x0F24FD9e0524BA53d3f0A4A40350Adf5370b4A53",
+    "minter": "0x2Be9B8640ED32815d3B9e8C92AbcD3F15F07396f",
+    "expectedWrappedToken": "0x914Cf96BF28b7b4921db27b264ecEd71aC91134E"
+  },
+  "wallet": null,
+  "plannedRawBurn": "1000000000000000000",
+  "observations": [
+    {
+      "name": "source",
+      "chainId": 11155111,
+      "block": {
+        "number": 11666221,
+        "hash": "0x8741ad28d6f2cb12a732dee3cf4c0ad6933f72200eaa0feb125c4816815d4d37"
+      }
+    },
+    {
+      "name": "destination",
+      "chainId": 102031,
+      "block": {
+        "number": 5456391,
+        "hash": "0xd6a1845e5c7375d6dd2b4c9917915ac565c14d04f071ffca9b28253cbb8d432f"
+      }
+    },
+    {
+      "name": "source identity",
+      "role": "source",
+      "address": "0x0F24FD9e0524BA53d3f0A4A40350Adf5370b4A53",
+      "block": {
+        "number": 11666221,
+        "hash": "0x8741ad28d6f2cb12a732dee3cf4c0ad6933f72200eaa0feb125c4816815d4d37"
+      },
+      "verified": false,
+      "observedCodeHash": "0x9a404486448379b01fe7c965491de86ad471d04c8b0363adde3df8a47ec0b0a1",
+      "expectedCodeHash": "0x2589a4135ea5663b6b91101ef0ac4a970d9611c4f65365a5124faf44058c8d5a",
+      "observedExecutableHash": "0xef8f2c71e072aed66492bfeebf87023323213dc5f0b7dbec569ad854da7cf0f6",
+      "expectedExecutableHash": "0xf61fcb43434c691cb4d54d6b1868e49c39dfd20ae1ae7e4f12763ec3208fe3a3",
+      "artifactSha256": "f96a1ea45ecf1dd4e3161efd9502cf512df5d6678b85f601c96a80339dc9da58"
+    },
+    {
+      "name": "minter identity",
+      "role": "minter",
+      "address": "0x2Be9B8640ED32815d3B9e8C92AbcD3F15F07396f",
+      "block": {
+        "number": 5456391,
+        "hash": "0xd6a1845e5c7375d6dd2b4c9917915ac565c14d04f071ffca9b28253cbb8d432f"
+      },
+      "verified": false,
+      "observedCodeHash": "0x13766672254b8e7d1abeeff599bf7b2f9c136aadcb208b91420797b0001953be",
+      "expectedCodeHash": "0x5c066c240ad34cf9d385754dfe7ba3e2959aa8a8d72e2444fb6891aa0eb44216",
+      "observedExecutableHash": "0xad8a82298e0077f44daa8de94937a9947d218657e941c00c2dc1535bce40a0cc",
+      "expectedExecutableHash": "0x5e8f7e6b75958ce926c18fa455ff49447dc0d7f267ae2c72c6090879744b0960",
+      "artifactSha256": "1b1521613488d077c80f8cecf035374d1a5d63e159f01a310e481d0fa3456e1c"
+    },
+    {
+      "name": "wrapped identity",
+      "role": "wrapped",
+      "address": "0x914Cf96BF28b7b4921db27b264ecEd71aC91134E",
+      "block": {
+        "number": 5456391,
+        "hash": "0xd6a1845e5c7375d6dd2b4c9917915ac565c14d04f071ffca9b28253cbb8d432f"
+      },
+      "verified": false,
+      "observedCodeHash": "0xdb781f2883e45cb5aa74605479a3cf77452e7282dbd026bde61eb39648064d5c",
+      "expectedCodeHash": "0x9d80f8932b57bc0e82a24df20969e7dad2639dc272350297a813a307515b9b73",
+      "observedExecutableHash": "0xaf4aa5dc914455d2fedfa8d8314a5ad9b2a72cde5688d69cdf0de32f9a337257",
+      "expectedExecutableHash": "0x9bc2cf0c723d3a65de4e1d2604cc9caaa021f8e430a1572a4a99bdb890eb970e",
+      "artifactSha256": "ad14354c7fbc97d7122454b3d9aede02c6431a538f034c9622a3fc4701cf1191"
+    }
+  ],
+  "blockers": [
+    "source: executable code does not match the pinned profile.",
+    "minter: executable code does not match the pinned profile.",
+    "wrapped: executable code does not match the pinned profile.",
+    "No public project wallet was supplied; native/token balances and registration-owner eligibility remain unverified.",
+    "Signer control must be confirmed externally; public addresses and keystore filenames do not prove signing access.",
+    "Live transaction gas estimates and funding headroom must be reviewed before writes."
+  ],
+  "status": "incomplete",
+  "purpose": "Screening only: public defaults from pinned upstream bridge/.env.example. These are not selected project deployments."
+}

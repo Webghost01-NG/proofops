@@ -1,0 +1,37 @@
+{
+  "observedAt": "2026-09-09T07:51:54.845Z",
+  "wallet": "0x6CeD8D6Bad8Dfd2e60BCEA116fE74548f959f1F2",
+  "deployments": [
+    {
+      "name": "TestERC20",
+      "chainId": 11155111,
+      "block": {
+        "number": 11666612,
+        "hash": "0x6920deb63b8ada7e508f3befd0d18e3108f5b7da93f62b9619aeabd4fc76cbe8"
+      },
+      "estimatedGas": "591856",
+      "gasPriceWei": "1096899166",
+      "proposedGasLimit": "710228",
+      "proposedMaxFeePerGasWei": "2193798332",
+      "proposedFeeCeilingWei": "1558097001739696",
+      "balanceWei": "100587121015810964",
+      "valueWei": "0"
+    },
+    {
+      "name": "ASCMinter",
+      "chainId": 102031,
+      "block": {
+        "number": 5456652,
+        "hash": "0xb7c70a591c0f95454acc8d34b82f912865ab8dcd586907891d0ca212080b0bba"
+      },
+      "estimatedGas": "1449076",
+      "gasPriceWei": "500000000",
+      "proposedGasLimit": "1738892",
+      "proposedMaxFeePerGasWei": "1000000000",
+      "proposedFeeCeilingWei": "1738892000000000",
+      "balanceWei": "10000000000000000000000",
+      "valueWei": "0"
+    }
+  ],
+  "limitations": "Latest-block balance observations and current gas estimates, not finalized receipts. Fee ceilings allow 20% gas headroom and twice observed gas price. Wrapped deployment and later actions await their own estimates. Browser signer not yet connected."
+}

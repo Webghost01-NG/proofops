@@ -1,0 +1,25 @@
+{
+  "recordedAfterDeployments": true,
+  "checks": [
+    {
+      "name": "Source RPC",
+      "status": "ready",
+      "detail": "Connected to chain 11155111."
+    },
+    {
+      "name": "Creditcoin RPC",
+      "status": "ready",
+      "detail": "Connected to chain 102031."
+    },
+    {
+      "name": "Chain attestation",
+      "status": "ready",
+      "detail": "Source height 11666710 attested; observed at Creditcoin block 5456762."
+    },
+    {
+      "name": "Proof service",
+      "status": "ready",
+      "detail": "Service reports height 11666710. Proof generation is checked separately for each transaction."
+    }
+  ]
+}

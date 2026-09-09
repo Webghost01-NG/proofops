@@ -1,0 +1,7 @@
+{
+  "id": "attestcoin-bridge-v1",
+  "sourceEmitter": "0x809d323140d05024fC06E8C38F8bfAD3Bd423203",
+  "minter": "0x8cd2da9e45d18c47a803f065a3625ae68bf37b17",
+  "expectedWrappedToken": "0x0908e0409d593409d251306302fdca0c45198b9c",
+  "caller": "0x6CeD8D6Bad8Dfd2e60BCEA116fE74548f959f1F2"
+}
